@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro de Evaluación · Comunicación</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:     #F7F3ED;
+    --ink:       #1A1410;
+    --rust:      #C4522A;
+    --sage:      #5A7A5E;
+    --gold:      #D4A843;
+    --mist:      #E8E2D9;
+    --warm-gray: #8C7B6E;
+    --white:     #FFFFFF;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--rust);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: multiply;
+  }
+
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--rust);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.5;
+  }
+
+  body:hover .cursor { opacity: 1; }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    background: rgba(247,243,237,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s;
+  }
+
+  .top-bar.scrolled { border-bottom-color: var(--mist); }
+
+  .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .brand em { color: var(--rust); font-style: italic; }
+
+  .top-nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .top-nav a {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .top-nav a:hover { color: var(--rust); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Radial atmosphere */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 40%, rgba(196,82,42,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 60% at 85% 60%, rgba(90,122,94,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 90%, rgba(212,168,67,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Large decorative letters */
+  .hero-deco {
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(180px, 25vw, 340px);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(196,82,42,0.04);
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .hero-deco.l { left: -60px; }
+  .hero-deco.r { right: -40px; }
+
+  /* Vertical ornament lines */
+  .hero-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--rust));
+    margin: 0 auto 40px;
+    opacity: 0;
+    animation: fadeIn 1s 0.2s forwards;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+    position: relative;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 300;
+    line-height: 1.02;
+    color: var(--ink);
+    max-width: 820px;
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s forwards;
+    position: relative;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .hero-divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--rust), transparent);
+    margin: 28px auto;
+    opacity: 0;
+    animation: fadeIn 0.9s 0.8s forwards;
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(17px, 2.5vw, 22px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+    position: relative;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.1s forwards;
+    position: relative;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .stat-sep {
+    width: 1px;
+    height: 48px;
+    background: var(--mist);
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.8s forwards;
+  }
+
+  .scroll-hint span {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(to bottom, var(--rust), transparent);
+    animation: scrollPulse 1.8s ease-in-out infinite;
+  }
+
+  /* ── TESTS SECTION ── */
+  .tests-section {
+    padding: 100px 48px 120px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .section-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .section-title em { font-style: italic; color: var(--rust); }
+
+  /* Cards grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  /* Individual test card */
+  .test-card {
+    position: relative;
+    background: var(--white);
+    overflow: hidden;
+    cursor: none;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .test-card:hover { transform: translateY(-6px); z-index: 2; }
+
+  /* Accent top border — color per card */
+  .test-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .test-card:hover::before { transform: scaleX(1); }
+
+  .card-rust::before { background: var(--rust); }
+  .card-gold::before { background: var(--gold); }
+  .card-sage::before { background: var(--sage); }
+
+  /* Card inner padding */
+  .card-inner {
+    padding: 48px 40px 52px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Card number */
+  .card-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 24px;
+    transition: color 0.3s;
+  }
+
+  .card-rust .card-num { color: rgba(196,82,42,0.12); }
+  .card-gold .card-num { color: rgba(212,168,67,0.14); }
+  .card-sage .card-num { color: rgba(90,122,94,0.12); }
+
+  .test-card:hover .card-rust .card-num { color: rgba(196,82,42,0.22); }
+  .test-card:hover .card-gold .card-num { color: rgba(212,168,67,0.24); }
+  .test-card:hover .card-sage .card-num { color: rgba(90,122,94,0.22); }
+
+  /* Card label */
+  .card-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    transition: color 0.3s;
+  }
+
+  .card-rust .card-label { color: var(--rust); }
+  .card-gold .card-label { color: var(--gold); }
+  .card-sage .card-label { color: var(--sage); }
+
+  /* Card title */
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  .card-title em { font-style: italic; }
+
+  /* Card description */
+  .card-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--warm-gray);
+    line-height: 1.75;
+    flex: 1;
+    margin-bottom: 36px;
+  }
+
+  /* Card meta pills */
+  .card-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  .meta-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border: 1px solid var(--mist);
+    color: var(--warm-gray);
+  }
+
+  /* Card CTA */
+  .card-cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .card-rust .card-cta { color: var(--rust); }
+  .card-gold .card-cta { color: var(--gold); }
+  .card-sage .card-cta { color: var(--sage); }
+
+  .cta-line {
+    height: 1px;
+    width: 32px;
+    transition: width 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .card-rust .cta-line { background: var(--rust); }
+  .card-gold .cta-line { background: var(--gold); }
+  .card-sage .cta-line { background: var(--sage); }
+
+  .test-card:hover .cta-line { width: 56px; }
+
+  /* Card dimensions list */
+  .card-dims {
+    border-top: 1px solid var(--mist);
+    padding: 24px 40px 32px;
+  }
+
+  .dims-title {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 14px;
+  }
+
+  .dims-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .dim-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--warm-gray);
+    font-weight: 300;
+  }
+
+  .dim-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .card-rust .dim-dot { background: var(--rust); }
+  .card-gold .dim-dot { background: var(--gold); }
+  .card-sage .dim-dot { background: var(--sage); }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    background: var(--ink);
+    padding: 100px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .how-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 10% 50%, rgba(196,82,42,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse 50% 60% at 90% 30%, rgba(90,122,94,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .how-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .how-header {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .how-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .how-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(30px, 4.5vw, 50px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .how-title em { font-style: italic; color: var(--gold); }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .step-block {
+    background: rgba(255,255,255,0.03);
+    padding: 40px 32px;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .step-block:hover { background: rgba(255,255,255,0.07); }
+
+  .step-n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(232,226,217,0.55);
+    line-height: 1.65;
+  }
+
+  .step-block::after {
+    content: attr(data-num);
+    position: absolute;
+    top: 36px; right: 28px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.15);
+  }
+
+  /* ── QUOTE BAND ── */
+  .quote-band {
+    padding: 80px 48px;
+    background: var(--cream);
+    text-align: center;
+    position: relative;
+  }
+
+  .quote-band::before {
+    content: '\201C';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 240px;
+    font-weight: 300;
+    color: rgba(196,82,42,0.06);
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 3.5vw, 36px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink);
+    max-width: 760px;
+    margin: 0 auto 24px;
+    line-height: 1.55;
+    position: relative;
+  }
+
+  .quote-author {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+
+  /* ── LEVELS SECTION ── */
+  .levels-section {
+    padding: 100px 48px;
+    background: var(--white);
+  }
+
+  .levels-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .levels-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+    gap: 32px;
+  }
+
+  .levels-header-left .section-tag { margin-bottom: 12px; }
+
+  .levels-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .levels-title em { font-style: italic; color: var(--rust); }
+
+  .levels-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 380px;
+    line-height: 1.75;
+    text-align: right;
+  }
+
+  .levels-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .levels-table thead tr {
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .levels-table th {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    padding: 0 16px 16px;
+    text-align: left;
+  }
+
+  .levels-table th:first-child { padding-left: 0; }
+
+  .levels-table tbody tr {
+    border-bottom: 1px solid var(--mist);
+    transition: background 0.2s;
+  }
+
+  .levels-table tbody tr:hover { background: var(--cream); }
+
+  .levels-table td {
+    padding: 18px 16px;
+    font-size: 14px;
+    color: var(--ink);
+    vertical-align: middle;
+  }
+
+  .levels-table td:first-child { padding-left: 0; }
+
+  .level-num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+  }
+
+  .range-pill {
+    display: inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--warm-gray);
+    letter-spacing: 0.5px;
+  }
+
+  .level-name-cell {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 400;
+  }
+
+  .level-desc-cell {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--warm-gray);
+    font-style: italic;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    padding: 60px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .footer::before {
+    content: 'C';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 400px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.02);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(232,226,217,0.4);
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .footer-brand em { color: var(--rust); font-style: italic; }
+
+  .footer-line {
+    width: 60px;
+    height: 1px;
+    background: rgba(196,82,42,0.4);
+    margin: 20px auto;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(232,226,217,0.3);
+    position: relative;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+    50%       { opacity: 1;   transform: scaleY(1); }
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.2,0,0,1), transform 0.8s cubic-bezier(0.2,0,0,1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .cards-grid { grid-template-columns: 1fr; gap: 2px; }
+    .steps-row  { grid-template-columns: repeat(2, 1fr); }
+    .levels-header { flex-direction: column; align-items: flex-start; }
+    .levels-desc { text-align: left; }
+    .top-nav { display: none; }
+    .tests-section, .how-section, .levels-section { padding: 72px 24px; }
+  }
+
+  @media (max-width: 560px) {
+    .hero-stats { gap: 24px; flex-wrap: wrap; justify-content: center; }
+    .steps-row { grid-template-columns: 1fr; }
+    .top-bar { padding: 18px 24px; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- TOP BAR -->
+<nav class="top-bar" id="topBar">
+  <a class="brand" href="#">Entrenamiento de <em>Re-Enfoque</em></a>
+  <div class="top-nav">
+    <a href="#tests">Tests</a>
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#niveles">Niveles</a>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-deco l">C</div>
+  <div class="hero-deco r">∞</div>
+
+  <div class="hero-line"></div>
+
+  <p class="hero-eyebrow">ENREBE · Inteligencia Comunicativa</p>
+
+  <h1 class="hero-title">
+    Descubre cómo te<br>
+    <em>comunicas</em> con el mundo
+  </h1>
+
+  <div class="hero-divider"></div>
+
+  <p class="hero-sub">
+    Tres tests clínicos independientes para evaluar tu comunicación asertiva,
+    afectiva y efectiva. Resultados precisos, reflexión profunda.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">3</span>
+      <span class="stat-label">Tests</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat">
+      <span class="stat-num">60</span>
+      <span class="stat-label">Preguntas</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat">
+      <span class="stat-num">15</span>
+      <span class="stat-label">Niveles</span>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat">
+      <span class="stat-num">~20'</span>
+      <span class="stat-label">Duración total</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Explorar</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══════════════ TESTS ══════════════ -->
+<section class="tests-section" id="tests">
+  <div class="section-header reveal">
+    <span class="section-tag">Los tres ejes de la comunicación</span>
+    <h2 class="section-title">Elige tu <em>punto de partida</em></h2>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- CARD 1: ASERTIVIDAD -->
+    <a class="test-card card-rust reveal reveal-delay-1" href="test-asertividad-whatsapp.html">
+      <div class="card-inner">
+        <div class="card-num">01</div>
+        <p class="card-label">Test de Asertividad</p>
+        <h3 class="card-title">Comunicación<br><em>Asertiva</em></h3>
+        <p class="card-desc">
+          Evalúa tu capacidad de expresar necesidades, establecer límites y comunicarte
+          con autenticidad sin pasividad ni agresividad. El equilibrio entre tu voz y la del otro.
+        </p>
+        <div class="card-meta">
+          <span class="meta-tag">20 preguntas</span>
+          <span class="meta-tag">10 dimensiones</span>
+          <span class="meta-tag">~7 minutos</span>
+        </div>
+        <div class="card-cta">
+          <div class="cta-line"></div>
+          Iniciar test
+        </div>
+      </div>
+      <div class="card-dims">
+        <p class="dims-title">Dimensiones evaluadas</p>
+        <div class="dims-list">
+          <div class="dim-item"><div class="dim-dot"></div>Expresión de opiniones</div>
+          <div class="dim-item"><div class="dim-dot"></div>Gestión de límites</div>
+          <div class="dim-item"><div class="dim-dot"></div>Manejo del conflicto</div>
+          <div class="dim-item"><div class="dim-dot"></div>Autoexpresión emocional</div>
+          <div class="dim-item"><div class="dim-dot"></div>Pedir y recibir · Escucha asertiva</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 2: AFECTIVIDAD -->
+    <a class="test-card card-gold reveal reveal-delay-2" href="test-comunicacion-afectiva-whatsapp.html">
+      <div class="card-inner">
+        <div class="card-num">02</div>
+        <p class="card-label">Test de Afectividad</p>
+        <h3 class="card-title">Comunicación<br><em>Afectiva</em></h3>
+        <p class="card-desc">
+          Explora cómo vives, expresas y recibes el afecto en tus vínculos. La inteligencia
+          emocional relacional — esa capacidad de dar y recibir cariño con autenticidad.
+        </p>
+        <div class="card-meta">
+          <span class="meta-tag">20 preguntas</span>
+          <span class="meta-tag">10 dimensiones</span>
+          <span class="meta-tag">~8 minutos</span>
+        </div>
+        <div class="card-cta">
+          <div class="cta-line"></div>
+          Iniciar test
+        </div>
+      </div>
+      <div class="card-dims">
+        <p class="dims-title">Dimensiones evaluadas</p>
+        <div class="dims-list">
+          <div class="dim-item"><div class="dim-dot"></div>Expresión de amor y cariño</div>
+          <div class="dim-item"><div class="dim-dot"></div>Recepción de afecto</div>
+          <div class="dim-item"><div class="dim-dot"></div>Gestión de la vulnerabilidad</div>
+          <div class="dim-item"><div class="dim-dot"></div>Empatía emocional</div>
+          <div class="dim-item"><div class="dim-dot"></div>Apego · Sostén afectivo</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 3: EFECTIVIDAD -->
+    <a class="test-card card-sage reveal reveal-delay-3" href="test-comunicacion-efectiva-whatsapp.html">
+      <div class="card-inner">
+        <div class="card-num">03</div>
+        <p class="card-label">Test de Efectividad</p>
+        <h3 class="card-title">Comunicación<br><em>Efectiva</em></h3>
+        <p class="card-desc">
+          Mide tu capacidad de transmitir ideas con claridad, precisión e impacto en
+          cualquier contexto. La habilidad de que tu mensaje llegue exactamente como lo intendiste.
+        </p>
+        <div class="card-meta">
+          <span class="meta-tag">20 preguntas</span>
+          <span class="meta-tag">10 dimensiones</span>
+          <span class="meta-tag">~7 minutos</span>
+        </div>
+        <div class="card-cta">
+          <div class="cta-line"></div>
+          Iniciar test
+        </div>
+      </div>
+      <div class="card-dims">
+        <p class="dims-title">Dimensiones evaluadas</p>
+        <div class="dims-list">
+          <div class="dim-item"><div class="dim-dot"></div>Claridad y estructura del mensaje</div>
+          <div class="dim-item"><div class="dim-dot"></div>Escucha activa</div>
+          <div class="dim-item"><div class="dim-dot"></div>Adaptación al interlocutor</div>
+          <div class="dim-item"><div class="dim-dot"></div>Persuasión e influencia</div>
+          <div class="dim-item"><div class="dim-dot"></div>Comunicación digital · Síntesis</div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════════ HOW IT WORKS ══════════════ -->
+<section class="how-section" id="como-funciona">
+  <div class="how-inner">
+    <div class="how-header reveal">
+      <span class="how-tag">Proceso</span>
+      <h2 class="how-title">Simple, profundo y <em>revelador</em></h2>
+    </div>
+
+    <div class="steps-row">
+      <div class="step-block reveal reveal-delay-1" data-num="01">
+        <div class="step-n">1</div>
+        <h4 class="step-title">Elige un test</h4>
+        <p class="step-desc">Selecciona el eje de comunicación que quieres explorar: asertividad, afectividad o efectividad. Puedes hacer los tres en cualquier orden.</p>
+      </div>
+      <div class="step-block reveal reveal-delay-2" data-num="02">
+        <div class="step-n">2</div>
+        <h4 class="step-title">Responde con honestidad</h4>
+        <p class="step-desc">20 preguntas con opciones en orden aleatorio. No hay respuestas correctas — solo tu patrón real. Tómate el tiempo que necesites.</p>
+      </div>
+      <div class="step-block reveal reveal-delay-3" data-num="03">
+        <div class="step-n">3</div>
+        <h4 class="step-title">Recibe tu perfil</h4>
+        <p class="step-desc">Puntaje por dimensión, nivel de desarrollo, análisis reflexivo, tus fortalezas y recomendaciones de crecimiento específicas para ti.</p>
+      </div>
+      <div class="step-block reveal" style="transition-delay:0.4s" data-num="04">
+        <div class="step-n">4</div>
+        <h4 class="step-title">Comparte el resultado</h4>
+        <p class="step-desc">Con un toque envías tu resultado completo por WhatsApp directamente al profesional que te acompaña en el proceso.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ QUOTE ══════════════ -->
+<div class="quote-band">
+  <p class="quote-text reveal">
+    "La calidad de tu comunicación determina la calidad de tu vida. No porque el mundo te escuche mejor, sino porque tú te entiendes mejor a ti mismo."
+  </p>
+  <p class="quote-author reveal">Programa de Evaluación Comunicativa</p>
+</div>
+
+<!-- ══════════════ LEVELS ══════════════ -->
+<section class="levels-section" id="niveles">
+  <div class="levels-inner">
+    <div class="levels-header reveal">
+      <div class="levels-header-left">
+        <span class="section-tag">Espectro de desarrollo</span>
+        <h2 class="levels-title">Cinco <em>niveles</em>,<br>un camino de crecimiento</h2>
+      </div>
+      <p class="levels-desc">Cada test evalúa el mismo espectro de 5 niveles. Conocer el tuyo es el primer paso para avanzar al siguiente.</p>
+    </div>
+
+    <table class="levels-table reveal">
+      <thead>
+        <tr>
+          <th>Nivel</th>
+          <th>Rango</th>
+          <th>Asertividad</th>
+          <th>Afectividad</th>
+          <th>Efectividad</th>
+          <th>Tagline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="level-num-badge" style="background:#D4D4D4;color:#666;">1</span></td>
+          <td><span class="range-pill">20–39</span></td>
+          <td class="level-name-cell">Comunicación Pasiva</td>
+          <td class="level-name-cell">Afect. Restringida</td>
+          <td class="level-name-cell">Comunicación Básica</td>
+          <td class="level-desc-cell">El punto de partida consciente</td>
+        </tr>
+        <tr>
+          <td><span class="level-num-badge" style="background:#D4A843;color:white;">2</span></td>
+          <td><span class="range-pill">40–59</span></td>
+          <td class="level-name-cell">En Desarrollo</td>
+          <td class="level-name-cell">En Construcción</td>
+          <td class="level-name-cell">En Desarrollo</td>
+          <td class="level-desc-cell">La transición activa</td>
+        </tr>
+        <tr>
+          <td><span class="level-num-badge" style="background:#5A7A5E;color:white;">3</span></td>
+          <td><span class="range-pill">60–74</span></td>
+          <td class="level-name-cell">Asertividad Moderada</td>
+          <td class="level-name-cell">Afect. Moderada</td>
+          <td class="level-name-cell">Comunicación Competente</td>
+          <td class="level-desc-cell">Base sólida, puntos ciegos</td>
+        </tr>
+        <tr>
+          <td><span class="level-num-badge" style="background:#C4522A;color:white;">4</span></td>
+          <td><span class="range-pill">75–89</span></td>
+          <td class="level-name-cell">Alta Asertividad</td>
+          <td class="level-name-cell">Alta Com. Afectiva</td>
+          <td class="level-name-cell">Alta Com. Efectiva</td>
+          <td class="level-desc-cell">Consistente y estratégico</td>
+        </tr>
+        <tr>
+          <td><span class="level-num-badge" style="background:#1A1410;color:white;">5</span></td>
+          <td><span class="range-pill">90–100</span></td>
+          <td class="level-name-cell">Asertividad Excepcional</td>
+          <td class="level-name-cell">Afectividad Plena</td>
+          <td class="level-name-cell">Comunicación Excepcional</td>
+          <td class="level-desc-cell">Estado óptimo · Liderazgo comunicacional</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="footer">
+  <p class="footer-brand">Centro de <em>Comunicación</em> · Evaluación Psicológica</p>
+  <div class="footer-line"></div>
+  <p class="footer-note">Test de Comunicación Asertiva · Afectiva · Efectiva</p>
+</footer>
+
+<script>
+  // ── Custom cursor ──
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  function animCursor() {
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      ring.style.opacity = '0.2';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.opacity = '0.5';
+    });
+  });
+
+  // ── Scroll: top-bar border ──
+  window.addEventListener('scroll', () => {
+    document.getElementById('topBar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── Reveal on scroll ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
