@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de Comunicación Efectiva</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3ED;
+    --ink: #1A1410;
+    --rust: #C4522A;
+    --sage: #5A7A5E;
+    --gold: #D4A843;
+    --mist: #E8E2D9;
+    --warm-gray: #8C7B6E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ============ HERO ============ */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(196,82,42,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(90,122,94,0.08) 0%, transparent 60%);
+  }
+
+  .decoration {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    font-weight: 700;
+    color: rgba(196,82,42,0.04);
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+  }
+  .decoration.left { left: -40px; bottom: 40px; }
+  .decoration.right { right: -20px; top: 60px; }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 80px);
+    line-height: 1.05;
+    font-weight: 700;
+    color: var(--ink);
+    max-width: 700px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 36px;
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .meta-item { text-align: center; }
+
+  .meta-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+  }
+
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .meta-sep {
+    width: 1px;
+    background: var(--mist);
+    align-self: stretch;
+  }
+
+  .start-btn {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    border: none;
+    padding: 18px 48px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+
+  .start-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--rust);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .start-btn:hover::after { transform: translateX(0); }
+  .start-btn span { position: relative; z-index: 1; }
+
+  /* ============ TEST ============ */
+  #test-section {
+    display: none;
+    min-height: 100vh;
+    padding: 0 24px 80px;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    background: rgba(247,243,237,0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--mist);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    margin: 0 -24px 60px;
+  }
+
+  .top-bar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--warm-gray);
+  }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    max-width: 340px;
+    margin: 0 28px;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 2px;
+    background: var(--mist);
+    position: relative;
+  }
+
+  .progress-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--rust);
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -4px; top: -3px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--rust);
+  }
+
+  .progress-text {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--warm-gray);
+    white-space: nowrap;
+  }
+
+  .question-container {
+    max-width: 740px;
+    margin: 0 auto;
+  }
+
+  .q-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 24px;
+  }
+
+  .q-category::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--rust);
+  }
+
+  .q-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--warm-gray);
+    margin-bottom: 16px;
+  }
+
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 30px);
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 48px;
+    min-height: 80px;
+  }
+
+  .intensity-strip {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding: 0 2px;
+  }
+
+  .intensity-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    opacity: 0.6;
+  }
+
+  /* Options */
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    background: white;
+    border: 1.5px solid var(--mist);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: var(--rust);
+    transition: width 0.3s;
+  }
+
+  .option-btn:hover {
+    border-color: var(--rust);
+    transform: translateX(4px);
+  }
+
+  .option-btn:hover::before { width: 3px; }
+
+  .option-btn.selected {
+    border-color: var(--rust);
+    background: rgba(196,82,42,0.04);
+  }
+
+  .option-btn.selected::before { width: 3px; }
+
+  .option-value { display: none; }
+
+  .option-text {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  /* Nav */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-btn {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  .nav-btn.primary {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  .nav-btn.primary:hover:not(:disabled) {
+    background: var(--rust);
+    border-color: var(--rust);
+  }
+
+  .nav-btn.primary:disabled {
+    background: var(--mist);
+    border-color: var(--mist);
+    color: var(--warm-gray);
+    opacity: 0.5;
+  }
+
+  /* ============ RESULTS ============ */
+  #results-section { display: none; }
+
+  .results-hero {
+    padding: 80px 24px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--mist);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .results-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(196,82,42,0.06) 0%, transparent 70%);
+  }
+
+  .result-eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .result-level-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 68px);
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .result-level-name em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .score-ring-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 40px auto 32px;
+  }
+
+  .score-ring-container svg { transform: rotate(-90deg); }
+
+  .score-ring-track { fill: none; stroke: var(--mist); stroke-width: 8; }
+
+  .score-ring-fill {
+    fill: none;
+    stroke: var(--rust);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 427;
+    stroke-dashoffset: 427;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .score-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-top: 4px;
+  }
+
+  /* Results body */
+  .results-content {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  .result-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--warm-gray);
+    text-align: center;
+    margin-bottom: 60px;
+    line-height: 1.5;
+  }
+
+  .result-block-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .result-block-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--mist);
+  }
+
+  .result-block { margin-bottom: 48px; }
+
+  .result-block p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  .result-block strong { font-weight: 500; }
+
+  /* Level range */
+  .level-range {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 60px;
+  }
+
+  .level-item {
+    padding: 16px 10px;
+    text-align: center;
+    border: 1px solid var(--mist);
+    position: relative;
+  }
+
+  .level-item.active {
+    border-color: var(--rust);
+    background: rgba(196,82,42,0.04);
+  }
+
+  .level-item.active::after {
+    content: '▼';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--rust);
+    font-size: 12px;
+  }
+
+  .level-item-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .level-item-range {
+    font-size: 10px;
+    color: var(--warm-gray);
+  }
+
+  /* Dimensions */
+  .dimensions-grid { display: grid; gap: 20px; margin-bottom: 48px; }
+
+  .dimension-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .dimension-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+  .dimension-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--rust);
+  }
+
+  .dimension-bar { height: 3px; background: var(--mist); }
+
+  .dimension-bar-fill {
+    height: 100%;
+    background: var(--rust);
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+    width: 0;
+  }
+
+  /* Restart */
+  .restart-btn {
+    display: block;
+    margin: 0 auto;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    border: none;
+    padding: 18px 48px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .restart-btn:hover { background: var(--rust); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    animation: fadeUp 0.5s forwards;
+  }
+
+  @media (max-width: 520px) {
+    .level-range { grid-template-columns: repeat(3, 1fr); }
+    .hero-meta { gap: 20px; }
+    .top-bar { padding: 14px 20px; }
+    .top-bar-title { display: none; }
+  }
+
+  /* WhatsApp Button */
+  .wa-btn-wrap { margin: 0 auto 20px; text-align: center; }
+
+  .wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 18px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .wa-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #128C7E;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .wa-btn:hover::after { transform: translateX(0); }
+  .wa-btn span, .wa-btn svg { position: relative; z-index: 1; }
+
+  .wa-note {
+    font-size: 12px;
+    color: var(--warm-gray);
+    margin-top: 10px;
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="decoration left">E</div>
+  <div class="decoration right">?</div>
+  <p class="hero-eyebrow">ENREBE · Test de Comunicación Efectiva</p>
+  <h1 class="hero-title">¿Qué tan <em>efectiva</em> es tu comunicación?</h1>
+  <p class="hero-subtitle">Un test clínico de 20 preguntas para evaluar tu capacidad de transmitir ideas con claridad, impacto y precisión en cualquier contexto.</p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-num">20</span>
+      <span class="meta-label">Preguntas</span>
+    </div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">
+      <span class="meta-num">5</span>
+      <span class="meta-label">Niveles</span>
+    </div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">
+      <span class="meta-num">~7'</span>
+      <span class="meta-label">Duración</span>
+    </div>
+  </div>
+  <button class="start-btn" onclick="startTest()"><span>Comenzar test →</span></button>
+</section>
+
+<!-- TEST -->
+<section id="test-section">
+  <div class="top-bar">
+    <span class="top-bar-title">Comunicación Efectiva</span>
+    <div class="progress-wrap">
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:5%"></div>
+      </div>
+      <span class="progress-text" id="progress-count">1 / 20</span>
+    </div>
+  </div>
+
+  <div class="question-container">
+    <div class="q-category" id="q-category"></div>
+    <p class="q-number" id="q-number"></p>
+    <h2 class="q-text" id="q-text"></h2>
+    <div class="intensity-strip">
+      <span class="intensity-label">Nunca / Muy difícil</span>
+      <span class="intensity-label">Siempre / Muy fácil</span>
+    </div>
+    <div class="options-grid" id="options-grid"></div>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="btn-prev" onclick="prevQuestion()" disabled>← Anterior</button>
+      <button class="nav-btn primary" id="btn-next" onclick="nextQuestion()" disabled>Siguiente →</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results-section">
+  <div class="results-hero">
+    <p class="result-eyebrow">Tu perfil de comunicación efectiva</p>
+    <h1 class="result-level-name" id="result-title"></h1>
+    <div class="score-ring-container">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle class="score-ring-track" cx="80" cy="80" r="68"/>
+        <circle class="score-ring-fill" id="score-ring" cx="80" cy="80" r="68"/>
+      </svg>
+      <div class="score-center">
+        <span class="score-number" id="score-display">0</span>
+        <span class="score-label">puntos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-content">
+    <p class="result-tagline" id="result-tagline"></p>
+
+    <div class="result-block-label" style="margin-bottom:24px;">Tu posición en el espectro</div>
+    <div class="level-range" id="level-range"></div>
+    <br><br>
+
+    <div class="result-block-label" style="margin-bottom:24px;">Dimensiones evaluadas</div>
+    <div class="dimensions-grid" id="dimensions-grid"></div>
+
+    <div class="result-block">
+      <div class="result-block-label">Análisis reflexivo</div>
+      <p id="result-reflection"></p>
+    </div>
+
+    <div class="result-block">
+      <div class="result-block-label">Tus fortalezas</div>
+      <p id="result-strengths"></p>
+    </div>
+
+    <div class="result-block">
+      <div class="result-block-label">Pasos para crecer</div>
+      <p id="result-recommendations"></p>
+    </div>
+
+    <!-- WhatsApp Button -->
+    <div class="wa-btn-wrap">
+      <a id="wa-result-btn" class="wa-btn" href="#" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span>📊 Enviar mi resultado por WhatsApp</span>
+      </a>
+      <p class="wa-note">Se abrirá WhatsApp con tu resultado listo para enviar</p>
+    </div>
+    <button class="restart-btn" onclick="restartTest()">Realizar el test de nuevo</button>
+  </div>
+</section>
+
+<script>
+const questions = [
+  // 1. Claridad y estructura del mensaje
+  { id:1, category:"Claridad y estructura del mensaje",
+    text:"Cuando necesitas explicar algo complejo a otra persona, ¿cómo organizas tu mensaje antes de comunicarlo?",
+    options:[
+      {value:1, text:"Hablo sin estructura previa y confío en que el otro entienda sobre la marcha."},
+      {value:2, text:"Tengo una idea vaga de lo que quiero decir pero raramente lo organizo con anticipación."},
+      {value:3, text:"A veces me tomo un momento para ordenar las ideas, pero no siempre lo hago."},
+      {value:4, text:"Generalmente estructuro el mensaje antes de comunicarlo: inicio, desarrollo y conclusión."},
+      {value:5, text:"Siempre adapto la estructura del mensaje al receptor y al objetivo que quiero lograr."}
+    ]
+  },
+  { id:2, category:"Claridad y estructura del mensaje",
+    text:"Después de explicar algo, ¿con qué frecuencia verificas que la otra persona realmente entendió lo que quisiste decir?",
+    options:[
+      {value:1, text:"Casi nunca; asumo que si no preguntan, entendieron."},
+      {value:2, text:"Rara vez; solo si noto señales evidentes de confusión."},
+      {value:3, text:"A veces pregunto, pero no de forma sistemática."},
+      {value:4, text:"Con frecuencia hago preguntas de verificación o pido que me confirmen lo entendido."},
+      {value:5, text:"Siempre cierro mis comunicaciones verificando la comprensión y ajustando si hay dudas."}
+    ]
+  },
+  // 2. Escucha activa
+  { id:3, category:"Escucha activa",
+    text:"Cuando alguien te está hablando, ¿qué tan presente estás realmente en la conversación?",
+    options:[
+      {value:1, text:"Con frecuencia pienso en lo que voy a responder mientras el otro aún habla."},
+      {value:2, text:"Escucho, pero me distraigo con facilidad o pierdo el hilo."},
+      {value:3, text:"Me mantengo presente la mayor parte del tiempo, aunque no siempre."},
+      {value:4, text:"Escucho activamente y proceso lo que dicen antes de formular mi respuesta."},
+      {value:5, text:"Estoy plenamente presente: escucho el contenido, el tono y lo no dicho, y lo integro en mi respuesta."}
+    ]
+  },
+  { id:4, category:"Escucha activa",
+    text:"¿Con qué frecuencia parafraseas o reformulas lo que alguien te dijo para asegurarte de haberlo entendido bien?",
+    options:[
+      {value:1, text:"Nunca; asumo que entendí bien a la primera."},
+      {value:2, text:"Raramente; solo en situaciones donde la confusión es obvia."},
+      {value:3, text:"A veces lo hago, sobre todo en conversaciones importantes."},
+      {value:4, text:"Con frecuencia verifico mi comprensión reformulando lo que escuché."},
+      {value:5, text:"Siempre; reformular lo que escucho es parte habitual de cómo me comunico."}
+    ]
+  },
+  // 3. Adaptación al interlocutor
+  { id:5, category:"Adaptación al interlocutor",
+    text:"Cuando hablas con alguien que tiene un nivel de conocimiento muy diferente al tuyo sobre un tema, ¿cómo adaptas tu comunicación?",
+    options:[
+      {value:1, text:"No la adapto; hablo de la misma forma independientemente del interlocutor."},
+      {value:2, text:"Intento simplificar o complejizar, pero sin mucha conciencia de si funciona."},
+      {value:3, text:"Hago ajustes básicos de lenguaje según si percibo que me entienden o no."},
+      {value:4, text:"Ajusto vocabulario, ejemplos y profundidad según el perfil de mi interlocutor."},
+      {value:5, text:"Personalizo completamente: tono, registro, analogías y ritmo según la persona y el contexto."}
+    ]
+  },
+  { id:6, category:"Adaptación al interlocutor",
+    text:"Cuando notas que tu mensaje no está llegando como esperabas, ¿qué haces?",
+    options:[
+      {value:1, text:"Repito el mismo mensaje en voz más alta o con más insistencia."},
+      {value:2, text:"Me frustro y dejo de intentar explicarlo."},
+      {value:3, text:"Intento explicarlo de otra forma, aunque no siempre sé cómo."},
+      {value:4, text:"Cambio el enfoque: uso otro ejemplo, cambio el canal o reformulo completamente."},
+      {value:5, text:"Diagnostico qué parte no funcionó y adapto estratégicamente el mensaje para ese receptor específico."}
+    ]
+  },
+  // 4. Comunicación no verbal
+  { id:7, category:"Comunicación no verbal y presencia",
+    text:"¿Con qué consciencia manejas tu lenguaje corporal, tono de voz y contacto visual cuando te comunicas?",
+    options:[
+      {value:1, text:"No suelo pensar en eso; me concentro solo en el contenido de lo que digo."},
+      {value:2, text:"Soy consciente de ello solo cuando alguien me lo señala."},
+      {value:3, text:"Lo tengo en cuenta en situaciones formales pero no en conversaciones cotidianas."},
+      {value:4, text:"Soy bastante consciente de mi presencia física y vocal en la mayoría de contextos."},
+      {value:5, text:"Mi lenguaje no verbal es coherente con mi mensaje y lo gestiono de forma deliberada."}
+    ]
+  },
+  { id:8, category:"Comunicación no verbal y presencia",
+    text:"Cuando hablas en público o expones ideas ante un grupo, ¿cómo gestionas la atención y el impacto de tu presencia?",
+    options:[
+      {value:1, text:"Me bloqueo o me pongo muy nervioso/a; la presencia del grupo me inhibe."},
+      {value:2, text:"Logro hablar, pero sin mucho control sobre cómo me perciben los demás."},
+      {value:3, text:"Me desenvuelvo razonablemente bien, aunque con cierta tensión."},
+      {value:4, text:"Gestiono bien la presencia grupal: contacto visual, pausas, voz y postura."},
+      {value:5, text:"Adapto mi presencia al grupo: capturoanticipo su atención, manejo el ritmo y genero impacto."}
+    ]
+  },
+  // 5. Comunicación escrita
+  { id:9, category:"Comunicación escrita",
+    text:"Cuando escribes un correo, informe o mensaje importante, ¿cómo es tu proceso?",
+    options:[
+      {value:1, text:"Escribo lo que se me ocurre y lo envío sin releer."},
+      {value:2, text:"Lo reviso brevemente, pero sin mucho criterio sobre claridad o tono."},
+      {value:3, text:"Me aseguro de que sea comprensible, aunque no siempre optimizo el tono o la estructura."},
+      {value:4, text:"Cuido la estructura, el tono, la claridad y la extensión antes de enviar."},
+      {value:5, text:"Adapto el mensaje al lector, al canal y al objetivo; reviso múltiples veces antes de compartirlo."}
+    ]
+  },
+  { id:10, category:"Comunicación escrita",
+    text:"¿Con qué claridad logras transmitir tu posición o propuesta en un texto escrito sin presencia física?",
+    options:[
+      {value:1, text:"Con frecuencia los mensajes escritos me generan malentendidos o requieren aclaración."},
+      {value:2, text:"A veces logro ser claro/a, pero no tengo seguridad sobre cómo se interpreta mi escritura."},
+      {value:3, text:"Generalmente me entiendo por escrito, aunque en temas complejos prefiero hablar."},
+      {value:4, text:"Me comunico bien por escrito: soy claro/a, directo/a y estructurado/a."},
+      {value:5, text:"Mi comunicación escrita es precisa, persuasiva y genera la acción o respuesta que busco."}
+    ]
+  },
+  // 6. Manejo del feedback
+  { id:11, category:"Dar y recibir retroalimentación",
+    text:"Cuando necesitas dar retroalimentación crítica a alguien, ¿cómo lo haces?",
+    options:[
+      {value:1, text:"Lo evito para no generar incomodidad o conflicto."},
+      {value:2, text:"Lo digo de forma muy indirecta o lo dejo caer sin estructurarlo."},
+      {value:3, text:"Lo comunico, pero con dificultad para encontrar el tono o el momento adecuado."},
+      {value:4, text:"Doy feedback específico, oportuno y orientado a comportamientos, no a personas."},
+      {value:5, text:"Entrego retroalimentación de forma clara, empática y accionable, adaptada al receptor."}
+    ]
+  },
+  { id:12, category:"Dar y recibir retroalimentación",
+    text:"Cuando recibes críticas o retroalimentación sobre tu desempeño o ideas, ¿cómo respondes?",
+    options:[
+      {value:1, text:"Me pongo a la defensiva o lo tomo de forma muy personal."},
+      {value:2, text:"Lo proceso con dificultad; me cuesta separar la crítica de mi valor personal."},
+      {value:3, text:"Lo escucho, aunque me genera malestar que tarda en procesarse."},
+      {value:4, text:"Escucho con apertura, evalúo la validez del feedback y decido qué incorporar."},
+      {value:5, text:"Recibo el feedback como información valiosa y lo uso activamente para ajustar mi comunicación."}
+    ]
+  },
+  // 7. Persuasión e influencia
+  { id:13, category:"Persuasión e influencia",
+    text:"Cuando quieres convencer a alguien de una idea o propuesta, ¿qué estrategia sueles usar?",
+    options:[
+      {value:1, text:"Repito mi punto hasta que ceda o abandono si no me escuchan."},
+      {value:2, text:"Presento mis argumentos de forma lineal sin pensar mucho en cómo recibirá el otro."},
+      {value:3, text:"Intento conectar la idea con los intereses del otro, aunque no siempre lo logro."},
+      {value:4, text:"Adapto mis argumentos a los valores, intereses y estilo del interlocutor."},
+      {value:5, text:"Construyo el caso de forma estratégica: datos, narrativa y conexión emocional según el contexto."}
+    ]
+  },
+  { id:14, category:"Persuasión e influencia",
+    text:"¿Con qué facilidad logras que otros comprendan y se alineen con tu punto de vista en conversaciones complejas?",
+    options:[
+      {value:1, text:"Rara vez; con frecuencia siento que no me escuchan o que mis argumentos no pesan."},
+      {value:2, text:"A veces funciona, pero no sé con claridad qué hace que unas veces funcione y otras no."},
+      {value:3, text:"Logro alinear a otros cuando el tema no genera mucha resistencia."},
+      {value:4, text:"Generalmente consigo generar consenso o comprensión, incluso en temas complejos."},
+      {value:5, text:"Soy efectivo/a persuadiendo en contextos difíciles, con resistencia o con múltiples interlocutores."}
+    ]
+  },
+  // 8. Gestión de conversaciones difíciles
+  { id:15, category:"Conversaciones difíciles",
+    text:"Cuando debes dar malas noticias o comunicar algo que generará reacción emocional, ¿cómo lo abordas?",
+    options:[
+      {value:1, text:"Lo pospongo indefinidamente o lo delego para no enfrentarlo."},
+      {value:2, text:"Lo digo de golpe sin preparación, o lo rodeo tanto que el mensaje se pierde."},
+      {value:3, text:"Lo preparo con algo de antelación, aunque no siempre con la estructura adecuada."},
+      {value:4, text:"Me preparo con cuidado: contexto, mensaje claro y espacio para la reacción del otro."},
+      {value:5, text:"Gestiono conversaciones difíciles con estructura, empatía y claridad, sin distorsionar el mensaje."}
+    ]
+  },
+  { id:16, category:"Conversaciones difíciles",
+    text:"Cuando una conversación se carga emocionalmente (discusión, desacuerdo, tensión), ¿cómo reaccionas?",
+    options:[
+      {value:1, text:"Me desconecto, me voy o dejo de comunicar de forma efectiva."},
+      {value:2, text:"Reacciono emocionalmente y pierdo el hilo del mensaje que quería transmitir."},
+      {value:3, text:"Me cuesta, pero generalmente logro mantener el hilo con algo de esfuerzo."},
+      {value:4, text:"Mantengo la calma y la claridad en el mensaje, incluso cuando la conversación sube de tono."},
+      {value:5, text:"Regulo mi estado y el del otro; uso la tensión como información para ajustar la comunicación."}
+    ]
+  },
+  // 9. Comunicación en contextos digitales
+  { id:17, category:"Comunicación digital y remota",
+    text:"En entornos de trabajo o relación a distancia (videollamadas, chats, emails), ¿cómo evalúas tu efectividad comunicativa?",
+    options:[
+      {value:1, text:"La comunicación digital me resulta muy difícil; pierdo mucho en la transición del presencial."},
+      {value:2, text:"Me defiendo, pero siento que muchos mensajes se pierden o malinterpretan."},
+      {value:3, text:"Me comunico razonablemente bien en digital, aunque no con la misma efectividad que en persona."},
+      {value:4, text:"Adapto mi comunicación al canal digital con buena efectividad."},
+      {value:5, text:"Domino la comunicación digital: sé cuándo usar cada canal y cómo compensar la falta de presencia física."}
+    ]
+  },
+  { id:18, category:"Comunicación digital y remota",
+    text:"¿Con qué frecuencia eliges el canal de comunicación más adecuado según el tipo de mensaje que quieres transmitir?",
+    options:[
+      {value:1, text:"Uso siempre el mismo canal independientemente del contenido o el receptor."},
+      {value:2, text:"A veces pienso en ello, pero sin mucha estrategia detrás de la elección."},
+      {value:3, text:"Generalmente elijo entre llamada o escrito, aunque no siempre con criterio claro."},
+      {value:4, text:"Elijo el canal según la urgencia, la sensibilidad del mensaje y el perfil del receptor."},
+      {value:5, text:"Tengo criterios claros para elegir el canal óptimo y lo ajusto según el objetivo de la comunicación."}
+    ]
+  },
+  // 10. Síntesis y concisión
+  { id:19, category:"Síntesis y concisión",
+    text:"¿Con qué facilidad logras transmitir una idea compleja de forma breve y clara cuando el tiempo o la atención son limitados?",
+    options:[
+      {value:1, text:"Me cuesta mucho sintetizar; tiendo a dar demasiado contexto o a extenderme sin necesidad."},
+      {value:2, text:"Puedo resumir, pero pierdo matices importantes o dejo la idea incompleta."},
+      {value:3, text:"En general logro ser conciso/a, aunque en temas complejos me cuesta encontrar el balance."},
+      {value:4, text:"Puedo sintetizar ideas complejas sin perder el mensaje central."},
+      {value:5, text:"Soy capaz de entregar el mensaje clave en el tiempo y espacio disponibles, con máximo impacto."}
+    ]
+  },
+  { id:20, category:"Síntesis y concisión",
+    text:"Cuando alguien te pide que expliques algo en pocas palabras, ¿qué ocurre?",
+    options:[
+      {value:1, text:"Me resulta casi imposible; necesito mucho espacio para explicar bien."},
+      {value:2, text:"Lo intento pero el resultado suele ser confuso o incompleto."},
+      {value:3, text:"Logro resumir de forma aceptable, aunque no siempre con la precisión que quisiera."},
+      {value:4, text:"Puedo construir una síntesis clara y útil en poco tiempo."},
+      {value:5, text:"Disfruto el reto de sintetizar; la concisión es una de mis fortalezas comunicativas."}
+    ]
+  }
+];
+
+const levels = [
+  {
+    name:"Comunicación Básica", range:"20–39", min:20, max:39,
+    tagline:"Tu mensaje existe. El siguiente paso es asegurarte de que llegue.",
+    reflection:`Tu perfil comunicativo revela una <strong>brecha significativa entre lo que quieres transmitir y lo que realmente llega al otro</strong>. En este nivel, la comunicación ocurre, pero sin mucha intención estructurada: el mensaje tiende a ser reactivo, poco adaptado al interlocutor y escasamente verificado. Esto no es necesariamente falta de inteligencia o capacidad — con frecuencia es resultado de no haber recibido formación en comunicación efectiva, o de operar en entornos donde esta habilidad nunca fue exigida de forma explícita. El costo suele ser invisible al principio: malentendidos, decisiones lentas, relaciones de trabajo tensas o mensajes que se pierden.`,
+    strengths:`Tienes <strong>voluntad de comunicarte</strong> — y eso ya es un punto de partida. También es probable que en contextos de mucha confianza, tu comunicación sea más fluida y efectiva, lo que muestra que el potencial está ahí. Quizás también tengas <strong>fortalezas en canales específicos</strong> (oral o escrito) que puedes aprovechar como base.`,
+    recommendations:`El primer paso es desarrollar el hábito de <strong>estructurar el mensaje antes de comunicarlo</strong>: qué quiero transmitir, a quién, con qué objetivo y en qué formato. Practica la verificación de comprensión —preguntar al final "¿quedó claro lo que quise decir?"— como rutina básica. Considera formación específica en comunicación efectiva: es una habilidad que se aprende y mejora sustancialmente con práctica deliberada.`
+  },
+  {
+    name:"Comunicación en Desarrollo", range:"40–59", min:40, max:59,
+    tagline:"Tienes las bases. Ahora se trata de hacerlo consistente.",
+    reflection:`Estás desarrollando una comunicación efectiva con <strong>resultados variables según el contexto</strong>. En situaciones familiares o de baja complejidad, tu comunicación funciona bien. Pero en contextos de alta presión, audiencias diversas o mensajes complejos, la efectividad disminuye. La inconsistencia es tu principal desafío: a veces el mensaje llega con claridad, otras veces genera confusión o requiere múltiples aclaraciones. Esto sugiere que tienes herramientas comunicativas, pero aún no están plenamente integradas como hábito.`,
+    strengths:`Tienes <strong>consciencia de cuándo tu comunicación no funcionó</strong>, lo que ya te coloca por delante de muchas personas. También muestras capacidad de <strong>escucha activa en contextos donde te sientes cómodo/a</strong> y una disposición genuina a mejorar. Tu comunicación escrita o verbal (generalmente una de las dos) probablemente esté más desarrollada que la otra.`,
+    recommendations:`Trabaja en la <strong>sistematización</strong>: elige dos o tres hábitos de comunicación efectiva y practícalos de forma deliberada durante 30 días (estructurar antes de hablar, verificar comprensión, adaptar el canal). También es útil <strong>grabarte o pedir feedback</strong> después de comunicaciones importantes para identificar patrones específicos de mejora. La consistencia es la brecha que separa este nivel del siguiente.`
+  },
+  {
+    name:"Comunicación Competente", range:"60–74", min:60, max:74,
+    tagline:"Te comunicas bien. El reto es hacerlo con excelencia bajo presión.",
+    reflection:`Tienes una comunicación <strong>sólida y funcional</strong> en la mayoría de contextos. Las personas que te rodean generalmente te entienden, confían en tu criterio comunicativo y te buscan cuando hay que transmitir algo importante. Sin embargo, en situaciones de alta complejidad —conversaciones difíciles, audiencias muy diversas, mensajes de alto impacto o entornos de mucha presión— tu efectividad puede fluctuar. La diferencia entre este nivel y el siguiente no es de habilidad técnica, sino de <strong>consistencia bajo condiciones desafiantes y adaptación estratégica avanzada</strong>.`,
+    strengths:`Sabes estructurar un mensaje, escuchas activamente y adaptas tu comunicación con relativa soltura. Probablemente seas percibido/a como alguien <strong>claro/a, directo/a y confiable</strong> en tus comunicaciones. También tienes buena conciencia sobre cuándo algo no funcionó y la capacidad de ajustarlo.`,
+    recommendations:`Tu crecimiento está en los <strong>escenarios de alta complejidad</strong>: busca deliberadamente oportunidades de hablar ante grupos grandes, dar feedback difícil o comunicar en situaciones de conflicto. Trabaja también en <strong>la dimensión estratégica</strong>: no solo cómo decirlo, sino cuándo, a quién primero y qué efecto buscas en el sistema relacional más amplio. La persuasión y la influencia en contextos difíciles son tus próximas fronteras.`
+  },
+  {
+    name:"Alta Comunicación Efectiva", range:"75–89", min:75, max:89,
+    tagline:"Tu comunicación es un activo estratégico. Lo sabes usar.",
+    reflection:`Tienes una comunicación <strong>consistentemente efectiva, adaptable y orientada al impacto</strong>. Adaptas el mensaje al interlocutor, manejas conversaciones difíciles con aplomo, escuchas con intención y sabes construir consenso. Las personas en este nivel son frecuentemente identificadas como <strong>comunicadores de referencia</strong> en sus entornos: los que explican lo que nadie podía explicar, los que desatascaban conversaciones bloqueadas o los que lograban alinear grupos diversos. Tu comunicación no solo informa — influye.`,
+    strengths:`Tienes dominio de múltiples dimensiones comunicativas: oral, escrita, no verbal y digital. Tu capacidad de <strong>leer al interlocutor y ajustarte en tiempo real</strong> es especialmente valiosa. También eres capaz de gestionar la carga emocional de una conversación sin perder el hilo del mensaje, lo que te permite operar con efectividad en entornos de alta tensión.`,
+    recommendations:`En este nivel, el crecimiento está en la <strong>comunicación sistémica</strong>: cómo tu comunicación impacta no solo al interlocutor inmediato sino a los sistemas relacionales y organizacionales en los que operas. Trabaja en la <strong>comunicación de liderazgo</strong>: cómo inspirar, alinear narrativas y sostener conversaciones culturales de largo plazo. También vale revisar si hay canales o contextos específicos donde tu efectividad baja — probablemente sean pocos, pero ahí está la siguiente mejora.`
+  },
+  {
+    name:"Comunicación Excepcional", range:"90–100", min:90, max:100,
+    tagline:"Comunicar bien es pensar bien. Tú dominas ambas cosas.",
+    reflection:`Tu comunicación representa <strong>una integración completa de habilidades técnicas, presencia, inteligencia emocional y estrategia</strong>. No solo transmites mensajes — construyes comprensión, generas movimiento y creas condiciones para que los demás también se comuniquen mejor. Las personas en este nivel tienen la rara capacidad de hacer que lo complejo parezca simple, de mantener la claridad bajo presión y de adaptar su comunicación a cualquier audiencia, canal o contexto con naturalidad y precisión. La comunicación, para ti, es <strong>una forma de pensamiento y de liderazgo</strong>.`,
+    strengths:`Tienes dominio técnico (estructura, claridad, concisión), presencia comunicativa (lenguaje no verbal, tono, ritmo), inteligencia relacional (adaptación, empatía, escucha) y estrategia (persuasión, influencia, elección de canal y momento). La combinación de estas cuatro dimensiones es lo que hace que tu comunicación sea verdaderamente excepcional.`,
+    recommendations:`Tu crecimiento ahora es de <strong>segundo orden</strong>: cómo usar tu capacidad comunicativa para desarrollar la de otros. Considera roles de mentoría, facilitación o liderazgo comunicacional en tu entorno. También es valioso explorar <strong>contextos radicalmente nuevos</strong> (culturas diferentes, audiencias muy distintas, formatos que no dominas) para mantener el músculo de la adaptación activo. La excelencia comunicativa, sin desafíos, puede volverse rutina.`
+  }
+];
+
+let currentQuestion = 0;
+let answers = new Array(20).fill(null);
+
+// Fisher-Yates shuffle
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Pre-shuffle: questions order + options order (once per session)
+const shuffledQuestions = shuffle(questions);
+const shuffledOptions = shuffledQuestions.map(q => shuffle(q.options));
+
+function startTest() {
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('test-section').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = shuffledQuestions[currentQuestion];
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-number').textContent = `Pregunta ${currentQuestion + 1} de 20`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  shuffledOptions[currentQuestion].forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn fade-in' + (answers[currentQuestion] === opt.value ? ' selected' : '');
+    btn.style.animationDelay = `${i * 0.07}s`;
+    btn.dataset.value = opt.value;
+    btn.innerHTML = `<span class="option-value">${opt.value}</span><span class="option-text">${opt.text}</span>`;
+    btn.onclick = () => selectOption(opt.value);
+    grid.appendChild(btn);
+  });
+
+  const pct = ((currentQuestion + 1) / 20) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = `${currentQuestion + 1} / 20`;
+  document.getElementById('btn-prev').disabled = currentQuestion === 0;
+  const nb = document.getElementById('btn-next');
+  nb.disabled = answers[currentQuestion] === null;
+  nb.textContent = currentQuestion === 19 ? 'Ver resultados →' : 'Siguiente →';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectOption(value) {
+  answers[currentQuestion] = value;
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (answers[currentQuestion] === null) return;
+  if (currentQuestion < 19) { currentQuestion++; renderQuestion(); }
+  else showResults();
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) { currentQuestion--; renderQuestion(); }
+}
+
+function showResults() {
+  document.getElementById('test-section').style.display = 'none';
+  document.getElementById('results-section').style.display = 'block';
+
+  const total = answers.reduce((s, v) => s + (v || 0), 0);
+  const level = levels.find(l => total >= l.min && total <= l.max) || levels[4];
+
+  document.getElementById('result-title').innerHTML = level.name.replace(/(\w+)$/, '<em>$1</em>');
+  document.getElementById('score-display').textContent = total;
+  document.getElementById('result-tagline').textContent = level.tagline;
+
+  setTimeout(() => {
+    const circ = 427;
+    document.getElementById('score-ring').style.strokeDashoffset = circ - circ * ((total - 20) / 80);
+  }, 300);
+
+  document.getElementById('level-range').innerHTML = levels.map(l =>
+    `<div class="level-item ${l.min === level.min ? 'active' : ''}">
+      <div class="level-item-name">${l.name.split(' ').slice(-1)[0]}</div>
+      <div class="level-item-range">${l.range}</div>
+    </div>`
+  ).join('');
+
+  // Dimensions — use original questions array for correct id mapping
+  const cats = [...new Set(questions.map(q => q.category))];
+  document.getElementById('dimensions-grid').innerHTML = cats.map(cat => {
+    const qs = questions.filter(q => q.category === cat);
+    const pct = Math.round((qs.reduce((s, q) => s + (answers[shuffledQuestions.findIndex(sq => sq.id === q.id)] || 0), 0) / (qs.length * 5)) * 100);
+    return `<div class="dimension-item">
+      <div class="dimension-top"><span class="dimension-name">${cat}</span><span class="dimension-pct">${pct}%</span></div>
+      <div class="dimension-bar"><div class="dimension-bar-fill" data-pct="${pct}"></div></div>
+    </div>`;
+  }).join('');
+
+  setTimeout(() => {
+    document.querySelectorAll('.dimension-bar-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
+  }, 500);
+
+  document.getElementById('result-reflection').innerHTML = level.reflection;
+  document.getElementById('result-strengths').innerHTML = level.strengths;
+  document.getElementById('result-recommendations').innerHTML = level.recommendations;
+
+  // WhatsApp button — destino: +584167036104
+  const dimLines = cats.map(cat => {
+    const qs = questions.filter(q => q.category === cat);
+    const pct = Math.round((qs.reduce((s, q) => s + (answers[shuffledQuestions.findIndex(sq => sq.id === q.id)] || 0), 0) / (qs.length * 5)) * 100);
+    return `  • ${cat}: ${pct}%`;
+  }).join('%0A');
+
+  const fecha = new Date().toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
+  const msg = [
+    `📊 *Resultado del Test de Comunicación Efectiva*`,
+    ``,
+    `🏷️ *Nivel:* ${level.name}`,
+    `🎯 *Puntaje:* ${total} / 100`,
+    `📅 *Fecha:* ${fecha}`,
+    ``,
+    `📌 *"${level.tagline}"*`,
+    ``,
+    `📈 *Puntuación por dimensión:*`,
+    dimLines,
+    ``,
+    `_Test realizado en: test-comunicacion-efectiva.netlify.app_`
+  ].join('%0A');
+
+  document.getElementById('wa-result-btn').href = `https://wa.me/584167036104?text=${msg}`;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartTest() {
+  currentQuestion = 0;
+  answers = new Array(20).fill(null);
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('hero').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
