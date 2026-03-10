@@ -4,25 +4,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Test de Comunicación Efectiva</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #F7F3ED;
-    --ink: #1A1410;
-    --rust: #C4522A;
-    --sage: #5A7A5E;
-    --gold: #D4A843;
-    --mist: #E8E2D9;
-    --warm-gray: #8C7B6E;
+    :root {
+    --dark-green: #1a4a2e;
+    --mid-green:  #2d6a45;
+    --light-green:#4a8c63;
+    --pale-green: #a8cbb5;
+    --leaf-green: #6dbf82;
+    --cream:      #f5f0e8;
+    --white:      #ffffff;
+    --text-dark:  #1a2e1f;
+    --mist:       #d4e6da;
+    --warm-gray:  #6a7f6e;
+    /* aliases for original var names */
+    --rust:       #2d6a45;
+    --sage:       #4a8c63;
+    --gold:       #6dbf82;
+    --ink:        #1a4a2e;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     background: var(--cream);
-    color: var(--ink);
+    color: var(--dark-green);
     min-height: 100vh;
   }
 
@@ -44,8 +52,8 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(196,82,42,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(90,122,94,0.08) 0%, transparent 60%);
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(45,106,69,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(74,140,99,0.08) 0%, transparent 60%);
   }
 
   .decoration {
@@ -53,7 +61,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 200px;
     font-weight: 700;
-    color: rgba(196,82,42,0.04);
+    color: rgba(45,106,69,0.04);
     pointer-events: none;
     line-height: 1;
     user-select: none;
@@ -62,12 +70,12 @@
   .decoration.right { right: -20px; top: 60px; }
 
   .hero-eyebrow {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--rust);
+    color: var(--mid-green);
     margin-bottom: 28px;
     opacity: 0;
     animation: fadeUp 0.8s 0.2s forwards;
@@ -78,7 +86,7 @@
     font-size: clamp(42px, 7vw, 80px);
     line-height: 1.05;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--dark-green);
     max-width: 700px;
     margin-bottom: 20px;
     opacity: 0;
@@ -87,11 +95,11 @@
 
   .hero-title em {
     font-style: italic;
-    color: var(--rust);
+    color: var(--mid-green);
   }
 
   .hero-subtitle {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', serif;
     font-size: 17px;
     font-weight: 300;
     color: var(--warm-gray);
@@ -116,7 +124,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 28px;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--dark-green);
     display: block;
   }
 
@@ -139,7 +147,7 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--cream);
-    background: var(--ink);
+    background: var(--dark-green);
     border: none;
     padding: 18px 48px;
     cursor: pointer;
@@ -154,7 +162,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--rust);
+    background: var(--mid-green);
     transform: translateX(-100%);
     transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
   }
@@ -209,7 +217,7 @@
   .progress-fill {
     position: absolute;
     left: 0; top: 0; bottom: 0;
-    background: var(--rust);
+    background: var(--mid-green);
     transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
   }
 
@@ -219,7 +227,7 @@
     right: -4px; top: -3px;
     width: 8px; height: 8px;
     border-radius: 50%;
-    background: var(--rust);
+    background: var(--mid-green);
   }
 
   .progress-text {
@@ -241,7 +249,7 @@
     font-size: 10px;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--rust);
+    color: var(--mid-green);
     margin-bottom: 24px;
   }
 
@@ -249,7 +257,7 @@
     content: '';
     display: block;
     width: 24px; height: 1px;
-    background: var(--rust);
+    background: var(--mid-green);
   }
 
   .q-number {
@@ -264,7 +272,7 @@
     font-size: clamp(22px, 3.5vw, 30px);
     font-weight: 400;
     line-height: 1.35;
-    color: var(--ink);
+    color: var(--dark-green);
     margin-bottom: 48px;
     min-height: 80px;
   }
@@ -311,20 +319,20 @@
     position: absolute;
     left: 0; top: 0; bottom: 0;
     width: 0;
-    background: var(--rust);
+    background: var(--mid-green);
     transition: width 0.3s;
   }
 
   .option-btn:hover {
-    border-color: var(--rust);
+    border-color: var(--mid-green);
     transform: translateX(4px);
   }
 
   .option-btn:hover::before { width: 3px; }
 
   .option-btn.selected {
-    border-color: var(--rust);
-    background: rgba(196,82,42,0.04);
+    border-color: var(--mid-green);
+    background: rgba(45,106,69,0.04);
   }
 
   .option-btn.selected::before { width: 3px; }
@@ -334,7 +342,7 @@
   .option-text {
     font-size: 15px;
     font-weight: 400;
-    color: var(--ink);
+    color: var(--dark-green);
     line-height: 1.4;
   }
 
@@ -351,29 +359,29 @@
     letter-spacing: 2.5px;
     text-transform: uppercase;
     padding: 14px 32px;
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid var(--dark-green);
     background: transparent;
-    color: var(--ink);
+    color: var(--dark-green);
     cursor: pointer;
     transition: all 0.25s;
   }
 
   .nav-btn:hover:not(:disabled) {
-    background: var(--ink);
+    background: var(--dark-green);
     color: var(--cream);
   }
 
   .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
 
   .nav-btn.primary {
-    background: var(--ink);
+    background: var(--dark-green);
     color: var(--cream);
-    border-color: var(--ink);
+    border-color: var(--dark-green);
   }
 
   .nav-btn.primary:hover:not(:disabled) {
-    background: var(--rust);
-    border-color: var(--rust);
+    background: var(--mid-green);
+    border-color: var(--mid-green);
   }
 
   .nav-btn.primary:disabled {
@@ -398,14 +406,14 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(196,82,42,0.06) 0%, transparent 70%);
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(45,106,69,0.06) 0%, transparent 70%);
   }
 
   .result-eyebrow {
     font-size: 11px;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--rust);
+    color: var(--mid-green);
     margin-bottom: 24px;
     position: relative;
   }
@@ -414,14 +422,14 @@
     font-family: 'Playfair Display', serif;
     font-size: clamp(38px, 6vw, 68px);
     font-weight: 700;
-    color: var(--ink);
+    color: var(--dark-green);
     margin-bottom: 8px;
     position: relative;
   }
 
   .result-level-name em {
     font-style: italic;
-    color: var(--rust);
+    color: var(--mid-green);
   }
 
   .score-ring-container {
@@ -437,7 +445,7 @@
 
   .score-ring-fill {
     fill: none;
-    stroke: var(--rust);
+    stroke: var(--mid-green);
     stroke-width: 8;
     stroke-linecap: round;
     stroke-dasharray: 427;
@@ -458,7 +466,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 40px;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--dark-green);
     line-height: 1;
   }
 
@@ -492,7 +500,7 @@
     font-size: 10px;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--rust);
+    color: var(--mid-green);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -511,7 +519,7 @@
   .result-block p {
     font-size: 16px;
     line-height: 1.8;
-    color: var(--ink);
+    color: var(--dark-green);
     font-weight: 300;
   }
 
@@ -533,8 +541,8 @@
   }
 
   .level-item.active {
-    border-color: var(--rust);
-    background: rgba(196,82,42,0.04);
+    border-color: var(--mid-green);
+    background: rgba(45,106,69,0.04);
   }
 
   .level-item.active::after {
@@ -543,14 +551,14 @@
     bottom: -20px;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--rust);
+    color: var(--mid-green);
     font-size: 12px;
   }
 
   .level-item-name {
     font-size: 11px;
     font-weight: 500;
-    color: var(--ink);
+    color: var(--dark-green);
     margin-bottom: 4px;
   }
 
@@ -568,19 +576,19 @@
     margin-bottom: 8px;
   }
 
-  .dimension-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .dimension-name { font-size: 13px; font-weight: 500; color: var(--dark-green); }
 
   .dimension-pct {
     font-family: 'Playfair Display', serif;
     font-size: 14px;
-    color: var(--rust);
+    color: var(--mid-green);
   }
 
   .dimension-bar { height: 3px; background: var(--mist); }
 
   .dimension-bar-fill {
     height: 100%;
-    background: var(--rust);
+    background: var(--mid-green);
     transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
     width: 0;
   }
@@ -594,14 +602,14 @@
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: var(--cream);
-    background: var(--ink);
+    background: var(--dark-green);
     border: none;
     padding: 18px 48px;
     cursor: pointer;
     transition: background 0.3s;
   }
 
-  .restart-btn:hover { background: var(--rust); }
+  .restart-btn:hover { background: var(--mid-green); }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -631,7 +639,7 @@
     background: #25D366;
     color: white;
     text-decoration: none;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -661,9 +669,30 @@
     margin-top: 10px;
     font-weight: 300;
   }
+
+  /* BACK BAR */
+  .back-bar {
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    background: #1a4a2e;
+    padding:.65rem 2rem;
+    display:flex; align-items:center; gap:1rem;
+  }
+  .back-link {
+    color:#6dbf82; text-decoration:none;
+    font-size:.75rem; letter-spacing:2px; text-transform:uppercase;
+    font-weight:700; transition:opacity .2s;
+  }
+  .back-link:hover { opacity:.7; }
+  .back-bar-name { color:#a8cbb5; font-size:.75rem; letter-spacing:1px; opacity:.7; }
 </style>
 </head>
-<body>
+<body style="padding-top:40px">
+<!-- BACK BAR -->
+<div class="back-bar">
+  <a class="back-link" href="enrebe.html">← ENREBE</a>
+  <span class="back-bar-name">/ Comunicación Efectiva</span>
+</div>
+
 
 <!-- HERO -->
 <section id="hero">
