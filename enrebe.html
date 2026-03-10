@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENREBE – Entrenamiento de Reenfoque Emocional, Bioquímico y Espiritual</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-green: #1a4a2e;
+    --mid-green: #2d6a45;
+    --light-green: #4a8c63;
+    --pale-green: #a8cbb5;
+    --leaf-green: #6dbf82;
+    --cream: #f5f0e8;
+    --white: #ffffff;
+    --text-dark: #1a2e1f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: var(--dark-green);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 64px;
+    box-shadow: 0 2px 20px rgba(0,0,0,.35);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--leaf-green); font-size: 1.6rem; font-weight: 700;
+    letter-spacing: 3px; cursor: pointer;
+  }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    color: var(--pale-green); text-decoration: none;
+    font-size: .82rem; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: .5rem 1.1rem; border-radius: 2px;
+    transition: background .2s, color .2s;
+    font-weight: 700;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    background: var(--mid-green); color: var(--white);
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; padding-top: 64px; }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  /*
+   * ┌─────────────────────────────────────────────────────┐
+   * │  IMAGEN DE FONDO DEL HERO                           │
+   * │  Reemplaza la URL entre comillas con la dirección   │
+   * │  de tu foto para mostrarla como fondo.              │
+   * └─────────────────────────────────────────────────────┘
+   */
+  :root {
+    --hero-bg-image: url("logo.png");
+  }
+
+  .hero {
+    min-height: calc(100vh - 64px);
+    background-image:
+      linear-gradient(to bottom, rgba(10,30,16,.65) 0%, rgba(26,74,46,.75) 100%),
+      var(--hero-bg-image);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 4rem 2rem; position: relative; overflow: hidden;
+  }
+  /* Fallback cuando no hay imagen cargada */
+  .hero.no-image {
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(74,140,99,.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(109,191,130,.15) 0%, transparent 50%),
+      linear-gradient(135deg, var(--dark-green) 0%, #0f2b1a 100%);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1' fill='%234a8c63' opacity='.12'/%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+  }
+  .hero-badge {
+    background: rgba(109,191,130,.15);
+    border: 1px solid var(--leaf-green);
+    color: var(--leaf-green);
+    font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
+    padding: .4rem 1.4rem; border-radius: 50px; margin-bottom: 2rem;
+    animation: fadeDown .8s ease both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: var(--white); letter-spacing: 6px;
+    text-shadow: 0 4px 30px rgba(0,0,0,.4);
+    animation: fadeDown .9s .1s ease both;
+  }
+  .hero h1 span { color: var(--leaf-green); }
+  .hero-subtitle {
+    font-size: clamp(.9rem, 2vw, 1.1rem);
+    color: var(--pale-green); margin-top: 1rem; letter-spacing: 2px;
+    animation: fadeDown 1s .2s ease both;
+  }
+  .hero-tagline {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--leaf-green); margin-top: 2rem;
+    animation: fadeDown 1s .3s ease both;
+  }
+  .hero-cta {
+    margin-top: 3rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    animation: fadeDown 1s .4s ease both;
+  }
+  .btn {
+    padding: .85rem 2.2rem; border-radius: 3px; font-size: .85rem;
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+    cursor: pointer; border: 2px solid transparent; transition: all .25s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary { background: var(--leaf-green); color: var(--dark-green); }
+  .btn-primary:hover { background: transparent; border-color: var(--leaf-green); color: var(--leaf-green); }
+  .btn-outline { border-color: var(--pale-green); color: var(--pale-green); }
+  .btn-outline:hover { background: var(--pale-green); color: var(--dark-green); }
+
+  /* ── SECTION CARDS ── */
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; padding: 5rem 3rem;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .card {
+    background: var(--white);
+    border-left: 4px solid var(--mid-green);
+    padding: 2.5rem 2rem; border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(26,74,46,.08);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(26,74,46,.15); }
+  .card-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--dark-green); font-size: 1.2rem; margin-bottom: .8rem;
+  }
+  .card p { color: #4a5a4f; line-height: 1.7; font-size: .92rem; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: var(--dark-green);
+    padding: 4rem 3rem 3rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--leaf-green), transparent);
+  }
+  .page-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white); font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing: 3px;
+  }
+  .page-header p { color: var(--pale-green); margin-top: .6rem; font-size: 1rem; letter-spacing: 1px; }
+
+  /* ── CONTENT BLOCK ── */
+  .content-block {
+    max-width: 1100px; margin: 0 auto; padding: 4rem 3rem;
+  }
+
+  .dual-mind {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem;
+  }
+  .mind-box {
+    padding: 2.5rem; border-radius: 4px;
+  }
+  .mind-box.ethereal { background: var(--dark-green); color: var(--white); }
+  .mind-box.tangible { background: var(--mid-green); color: var(--white); }
+  .mind-box h4 {
+    font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 1rem;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .mind-box p { line-height: 1.8; font-size: .93rem; opacity: .9; }
+  .mind-tag {
+    display: inline-block; background: var(--leaf-green); color: var(--dark-green);
+    font-size: .72rem; letter-spacing: 2px; text-transform: uppercase;
+    padding: .3rem .8rem; border-radius: 2px; margin-bottom: .5rem; font-weight: 700;
+  }
+  .full-quote {
+    background: var(--dark-green); color: var(--white);
+    padding: 3rem; border-radius: 4px; margin-top: 2.5rem;
+    text-align: center; font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 1.15rem; line-height: 1.9;
+    position: relative;
+  }
+  .full-quote::before { content: '"'; font-size: 5rem; color: var(--leaf-green); opacity: .3; position: absolute; top: .5rem; left: 1.5rem; line-height: 1; }
+
+  /* ── SCIENCE ── */
+  .science-pillar {
+    background: var(--white); border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(26,74,46,.08);
+    margin-bottom: 2rem; overflow: hidden;
+  }
+  .pillar-head {
+    background: var(--mid-green); color: var(--white);
+    padding: 1rem 2rem; font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; letter-spacing: 2px;
+  }
+  .pillar-body { padding: 2rem; color: #3a4f40; line-height: 1.8; }
+
+  /* ── TOOLS ── */
+  .tools-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; margin-top: 2.5rem;
+  }
+  .tool-card {
+    background: var(--white); border-radius: 4px;
+    border-top: 4px solid var(--leaf-green);
+    padding: 2rem; box-shadow: 0 4px 20px rgba(26,74,46,.08);
+    transition: transform .25s;
+  }
+  .tool-card:hover { transform: translateY(-4px); }
+  .tool-card h4 {
+    font-family: 'Playfair Display', serif; font-size: 1.1rem;
+    color: var(--dark-green); margin-bottom: .8rem; letter-spacing: 1px;
+  }
+  .tool-card p { color: #4a5a4f; line-height: 1.7; font-size: .88rem; }
+
+  /* ── PHILOSOPHY ── */
+  .phil-trio {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem;
+  }
+  .phil-box {
+    text-align: center; padding: 2.5rem 1.5rem; border-radius: 4px;
+  }
+  .phil-box:nth-child(1) { background: var(--dark-green); color: var(--white); }
+  .phil-box:nth-child(2) { background: var(--mid-green); color: var(--white); }
+  .phil-box:nth-child(3) { background: var(--light-green); color: var(--white); }
+  .phil-box h4 { font-family: 'Playfair Display', serif; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.2rem; }
+  .phil-box p { line-height: 1.8; font-size: .9rem; opacity: .9; }
+
+  /* ── TESTS ── */
+  .tests-intro { max-width: 700px; margin: 0 auto 3rem; text-align: center; }
+  .tests-intro h3 { font-family: 'Playfair Display', serif; color: var(--dark-green); font-size: 1.6rem; margin-bottom: 1rem; }
+  .tests-intro p { color: #4a5a4f; line-height: 1.7; }
+  .test-cards {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; max-width: 1100px; margin: 0 auto; padding: 0 3rem 4rem;
+  }
+  .test-card {
+    background: var(--white); border-radius: 4px;
+    border-left: 5px solid var(--mid-green);
+    padding: 2rem; box-shadow: 0 4px 20px rgba(26,74,46,.08);
+    cursor: pointer; transition: all .25s;
+  }
+  .test-card:hover { transform: translateX(6px); border-left-color: var(--leaf-green); }
+  .test-card h4 { font-family: 'Playfair Display', serif; color: var(--dark-green); margin-bottom: .6rem; font-size: 1.1rem; }
+  .test-card p { color: #4a5a4f; font-size: .87rem; line-height: 1.6; margin-bottom: 1rem; }
+  .test-card .btn-small {
+    background: var(--mid-green); color: var(--white);
+    border: none; padding: .5rem 1.2rem; border-radius: 2px;
+    font-size: .78rem; letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; font-weight: 700; transition: background .2s;
+  }
+  .test-card .btn-small:hover { background: var(--dark-green); }
+
+  /* ── QUIZ MODAL ── */
+  .quiz-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(10,30,16,.8);
+    z-index: 2000; align-items: center; justify-content: center; padding: 1rem;
+  }
+  .quiz-overlay.open { display: flex; }
+  .quiz-modal {
+    background: var(--cream); max-width: 680px; width: 100%;
+    border-radius: 6px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    max-height: 90vh; overflow-y: auto;
+  }
+  .quiz-header { background: var(--dark-green); padding: 1.8rem 2rem; color: var(--white); display: flex; justify-content: space-between; align-items: center; }
+  .quiz-header h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+  .quiz-close { background: none; border: none; color: var(--pale-green); font-size: 1.5rem; cursor: pointer; }
+  .quiz-body { padding: 2rem; }
+  .quiz-q { margin-bottom: 1.8rem; }
+  .quiz-q p { font-weight: 700; color: var(--dark-green); margin-bottom: .8rem; font-size: .95rem; }
+  .quiz-q label { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; font-size: .9rem; color: #3a4f40; cursor: pointer; }
+  .quiz-q input[type=radio] { accent-color: var(--mid-green); }
+  .quiz-submit { background: var(--mid-green); color: var(--white); border: none; padding: .85rem 2.2rem; border-radius: 3px; font-size: .85rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; cursor: pointer; width: 100%; transition: background .2s; }
+  .quiz-submit:hover { background: var(--dark-green); }
+  .quiz-result { display: none; padding: 2rem; text-align: center; }
+  .quiz-result h4 { font-family: 'Playfair Display', serif; color: var(--dark-green); font-size: 1.4rem; margin-bottom: 1rem; }
+  .quiz-result p { color: #4a5a4f; line-height: 1.7; }
+  .score-circle {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: var(--dark-green); color: var(--leaf-green);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    margin: 1.5rem auto; font-family: 'Playfair Display', serif;
+  }
+  .score-circle .num { font-size: 2rem; font-weight: 700; }
+  .score-circle .lbl { font-size: .65rem; letter-spacing: 1px; opacity: .7; }
+
+  /* ── THERAPISTS ── */
+  .therapists-intro { max-width: 700px; margin: 0 auto 3rem; text-align: center; padding: 0 2rem; }
+  .therapists-intro h3 { font-family: 'Playfair Display', serif; color: var(--dark-green); font-size: 1.6rem; margin-bottom: 1rem; }
+  .therapists-intro p { color: #4a5a4f; line-height: 1.7; }
+  .therapist-table-wrap { padding: 0 3rem 5rem; max-width: 1200px; margin: 0 auto; overflow-x: auto; }
+  table.therapists {
+    width: 100%; border-collapse: collapse;
+    background: var(--white); border-radius: 6px; overflow: hidden;
+    box-shadow: 0 8px 30px rgba(26,74,46,.12);
+  }
+  table.therapists thead tr { background: var(--dark-green); }
+  table.therapists thead th {
+    color: var(--leaf-green); font-family: 'Playfair Display', serif;
+    font-size: 1rem; letter-spacing: 2px; text-align: center;
+    padding: 1.2rem 1.5rem; font-weight: 400;
+  }
+  table.therapists tbody tr { border-bottom: 1px solid #e2ece6; transition: background .2s; }
+  table.therapists tbody tr:hover { background: #f0f7f3; }
+  table.therapists td { padding: 2rem 1.5rem; vertical-align: top; text-align: center; }
+  .t-photo {
+    width: 110px; height: 110px; border-radius: 50%;
+    background: var(--pale-green);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
+    border: 4px solid var(--mid-green);
+    overflow: hidden;
+  }
+  .t-photo img {
+    width: 100%; height: 100%; object-fit: cover; object-position: top;
+    border-radius: 50%;
+  }
+  .t-photo svg { width: 65%; height: 65%; fill: var(--dark-green); opacity: .5; }
+  .t-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--dark-green); margin-bottom: .3rem; }
+  .t-role { font-size: .78rem; color: var(--light-green); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+  .t-cv { color: #4a5a4f; font-size: .87rem; line-height: 1.7; text-align: left; }
+  .t-cv ul { padding-left: 1.2rem; margin-top: .5rem; }
+  .t-cv li { margin-bottom: .3rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark-green); color: var(--pale-green);
+    text-align: center; padding: 2.5rem;
+    font-size: .82rem; letter-spacing: 1px;
+  }
+  footer .ig-links { margin-top: .8rem; display: flex; gap: 1.5rem; justify-content: center; }
+  footer a { color: var(--leaf-green); text-decoration: none; transition: opacity .2s; }
+  footer a:hover { opacity: .7; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .dual-mind { grid-template-columns: 1fr; }
+    .phil-trio { grid-template-columns: 1fr; }
+    nav { flex-direction: column; height: auto; padding: .8rem 1rem; }
+    .nav-links { flex-wrap: wrap; justify-content: center; gap: .2rem; }
+    .section-grid, .content-block { padding: 3rem 1.5rem; }
+    .therapist-table-wrap { padding: 0 1rem 3rem; }
+    table.therapists td { padding: 1.2rem .8rem; }
+    .t-photo { width: 80px; height: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">ENREBE</div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('home')" id="nav-home" class="active">Inicio</a>
+    <a href="#" onclick="showPage('resignificacion')" id="nav-resignificacion">Resignificación</a>
+    <a href="#" onclick="showPage('ciencia')" id="nav-ciencia">Fundamento Científico</a>
+    <a href="#" onclick="showPage('herramientas')" id="nav-herramientas">Herramientas</a>
+    <a href="#" onclick="showPage('filosofia')" id="nav-filosofia">Bases Filosóficas</a>
+    <a href="#" onclick="showPage('tests')" id="nav-tests">Tests</a>
+    <a href="#" onclick="showPage('terapeutas')" id="nav-terapeutas">Terapeutas</a>
+  </div>
+</nav>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">Entrenamiento de 21 días</div>
+    <h1>EN<span>RE</span>BE</h1>
+    <p class="hero-subtitle">Entrenamiento de Reenfoque Emocional, Bioquímico y Espiritual</p>
+    <p class="hero-tagline">"Yo decido hacerlo diferente"</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="showPage('resignificacion')">Descubrir el Método</button>
+      <button class="btn btn-outline" onclick="showPage('tests')">Hacer un Test</button>
+    </div>
+  </div>
+
+  <div class="section-grid">
+    <div class="card" onclick="showPage('resignificacion')" style="cursor:pointer">
+      <div class="card-icon">🌱</div>
+      <h3>La Resignificación del Ser</h3>
+      <p>Mente dual: lo etéreo y lo tangible. Comprende cómo tus pensamientos moldean tu personalidad y tu realidad física.</p>
+    </div>
+    <div class="card" onclick="showPage('ciencia')" style="cursor:pointer">
+      <div class="card-icon">🔬</div>
+      <h3>Fundamento Científico</h3>
+      <p>Neurociencias, Psicología y Psiconeuroinmunoendocrinología: la base científica que sostiene cada práctica de ENREBE.</p>
+    </div>
+    <div class="card" onclick="showPage('herramientas')" style="cursor:pointer">
+      <div class="card-icon">🧘</div>
+      <h3>Herramientas y Técnicas</h3>
+      <p>Mindfulness, Yoga Inbound, P.N.L., Alimentación Consciente y Terapias para transformar hábitos de vida.</p>
+    </div>
+    <div class="card" onclick="showPage('filosofia')" style="cursor:pointer">
+      <div class="card-icon">🌿</div>
+      <h3>Bases Filosóficas</h3>
+      <p>Misión, visión y propósito del entrenamiento. Al finalizar reconocerás tus potencialidades únicas en todas las áreas de tu vida.</p>
+    </div>
+    <div class="card" onclick="showPage('tests')" style="cursor:pointer">
+      <div class="card-icon">📋</div>
+      <h3>Tests de Autoconocimiento</h3>
+      <p>Evalúa tu estado emocional, nivel de estrés y creencias limitantes con nuestras herramientas de diagnóstico.</p>
+    </div>
+    <div class="card" onclick="showPage('terapeutas')" style="cursor:pointer">
+      <div class="card-icon">👩‍⚕️</div>
+      <h3>Nuestros Terapeutas</h3>
+      <p>Conoce al equipo de profesionales certificados que acompañan tu proceso de transformación personal.</p>
+    </div>
+  </div>
+  <footer>
+    <p>© 2023 ENREBE · La Victoria, Aragua, Venezuela · Primera Edición</p>
+    <div class="ig-links">
+      <a href="#">📷 ara.espacio.bienestar</a>
+      <a href="#">📷 sohamyogalv</a>
+      <a href="#">📷 enrebe_consciencia</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ RESIGNIFICACIÓN ═══════════════ -->
+<div id="page-resignificacion" class="page">
+  <div class="page-header">
+    <h2>La Resignificación del Ser</h2>
+    <p>Propósito del Entrenamiento</p>
+  </div>
+  <div class="content-block">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <span style="display:inline-block; background:var(--dark-green); color:var(--leaf-green); font-family:'Playfair Display',serif; font-size:1.3rem; letter-spacing:3px; padding:.6rem 2rem; border-radius:3px; text-transform:uppercase;">LA MENTE DUAL</span>
+    </div>
+    <div class="dual-mind">
+      <div class="mind-box ethereal">
+        <span class="mind-tag">Lo Etéreo</span>
+        <br>
+        <span class="mind-tag" style="margin-top:.4rem; background:rgba(255,255,255,.2); color:var(--white);">Creencia Limitante · Emociones · Personalidad</span>
+        <p style="margin-top:1.2rem;">Los pensamientos crean nuestros sentimientos, estos generan nuestras emociones y juntos forman <strong>Nuestra Personalidad</strong>. Cómo actúo, cómo reacciono, cómo miro al mundo: ¿es amigable o desafiante, abundante o carente, lleno de posibilidades u obstáculos insalvables?</p>
+      </div>
+      <div class="mind-box tangible">
+        <span class="mind-tag">Lo Tangible</span>
+        <br>
+        <span class="mind-tag" style="margin-top:.4rem; background:rgba(255,255,255,.2); color:var(--white);">Sistema Nervioso · Endocrino · Inmune</span>
+        <p style="margin-top:1.2rem;">Aquello que la personalidad manifiesta físicamente incide y afecta la función organísmica, alterando o equilibrando el sistema de conexiones neurológicas, las respuestas reflejas y las funciones celulares de defensa natural del cuerpo ante el movimiento externo.</p>
+      </div>
+    </div>
+    <div class="full-quote">
+      El reto es reconocer e integrar lo etéreo, conscientizarlo por medio de la reflexión auténtica del proceso personal y asumir la responsabilidad de lo que allí coexiste para diferenciar lo útil y lo inútil, decidiendo lo que permanecerá, agradeciendo aquello que fue aprendido y que se dejará ir. Soltar en un acto de amor propio para pasar de allí con fuerza interior a lo tangible —manifestación aquí y ahora, en el siempre momento presente, en la Vida misma.
+    </div>
+    <div style="text-align:center; margin-top:3rem;">
+      <button class="btn btn-primary" onclick="showPage('ciencia')">Ver Fundamento Científico →</button>
+    </div>
+  </div>
+  <footer>
+    <p>© 2023 ENREBE · "Yo decido hacerlo diferente"</p>
+    <div class="ig-links">
+      <a href="#">📷 ara.espacio.bienestar</a>
+      <a href="#">📷 sohamyogalv</a>
+      <a href="#">📷 enrebe_consciencia</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ CIENCIA ═══════════════ -->
+<div id="page-ciencia" class="page">
+  <div class="page-header">
+    <h2>Fundamento Científico</h2>
+    <p>Los pilares del conocimiento que sostienen ENREBE</p>
+  </div>
+  <div class="content-block">
+    <div class="science-pillar">
+      <div class="pillar-head">🧠 Neurociencias</div>
+      <div class="pillar-body">Estudio del sistema nervioso, su estructura y sus funciones centrado en el cerebro y en su impacto en el comportamiento y las funciones cognitivas del ser humano, con el fin de comprender los mecanismos que regulan el control de las reacciones nerviosas y organísmico.</div>
+    </div>
+    <div class="science-pillar">
+      <div class="pillar-head">🧩 Psicología</div>
+      <div class="pillar-body">Estudio de la conducta humana con la finalidad de identificar patrones limitantes o impulsores a la acción que comandan las relaciones intra y extra humanas, basados en los conceptos Analíticos de Freud y los Humanistas de Carl Jung, con el propósito de acompañar al individuo en su exploración interna.</div>
+    </div>
+    <div class="science-pillar">
+      <div class="pillar-head">🔗 Psiconeuroinmunoendocrinología</div>
+      <div class="pillar-body">
+        Tiene por objeto el estudio de las relaciones entre los cuatro sistemas de control del organismo humano: el <strong>psicológico</strong>, el <strong>neurológico</strong>, el <strong>endocrinológico</strong> y el <strong>inmune</strong>; y la forma en la que ellos se relacionan.
+        <br><br>
+        A pesar de que cada sistema emplea un idioma diferente —el Endocrino a través de hormonas, el Inmune a través de interleukinas y el SNC a través de neurotransmisores— todas estas moléculas químicas son reconocidas por todos los sistemas, ya que todos poseen receptores para ellos.
+        <br><br>
+        <strong>Se trata de una red de sistemas comunicados, funcionando como un TODO, en permanente conexión con el medio externo.</strong>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:3rem;">
+      <button class="btn btn-primary" onclick="showPage('herramientas')">Ver Herramientas y Técnicas →</button>
+    </div>
+  </div>
+  <footer>
+    <p>© 2023 ENREBE · "Yo decido hacerlo diferente"</p>
+    <div class="ig-links">
+      <a href="#">📷 ara.espacio.bienestar</a>
+      <a href="#">📷 sohamyogalv</a>
+      <a href="#">📷 enrebe_consciencia</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ HERRAMIENTAS ═══════════════ -->
+<div id="page-herramientas" class="page">
+  <div class="page-header">
+    <h2>Herramientas y Técnicas</h2>
+    <p>El conjunto de prácticas que integran el método ENREBE</p>
+  </div>
+  <div class="content-block">
+    <div class="tools-grid">
+      <div class="tool-card">
+        <h4>🧘 Mindfulness</h4>
+        <p>Atención Consciente del Dr. John Kabat-Zinn. Técnica basada en entrenamiento por repetición de ejercicios que conectan el proceso mental (pensamientos), la percepción sensorial y motora o la reacción física con el propósito de regular las emociones y la conducta para equilibrar el funcionamiento fisiológico del organismo.</p>
+      </div>
+      <div class="tool-card">
+        <h4>🌀 Yoga Inbound</h4>
+        <p>Concebido por Srila Bhakti Aloka Paramadvaiti Swami. Técnica que aporta equilibrio físico neuro-sensoro-motor integrando los conceptos de espiritualidad.</p>
+      </div>
+      <div class="tool-card">
+        <h4>🗣 Programación Neurolingüística (P.N.L.)</h4>
+        <p>Técnica que permite la exploración del sistema de creencias o introyectos que el individuo ancla en su conducta y le dicta los dogmas con los cuales expresa sus emociones y sentimientos hacia sí mismo y el campo.</p>
+      </div>
+      <div class="tool-card">
+        <h4>🥗 Alimentación Consciente</h4>
+        <p>Consiste en dedicar atención plena a la hora de alimentarnos. Si comemos de forma consciente, seremos capaces de escuchar nuestras sensaciones físicas (hambre, saciedad) y mentales. Es mirar los alimentos de manera distinta para disfrutarlos plena y libremente, despertando el placer en el simple acto de comer.</p>
+      </div>
+      <div class="tool-card">
+        <h4>💆 Terapias y Rutinas</h4>
+        <p>Conjunto de protocolos terapéuticos y rutinas personalizadas diseñadas para anclar los nuevos patrones de conducta y reforzar los cambios saludables incorporados durante el entrenamiento de 21 días.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:3rem;">
+      <button class="btn btn-primary" onclick="showPage('filosofia')">Ver Bases Filosóficas →</button>
+    </div>
+  </div>
+  <footer>
+    <p>© 2023 ENREBE · "Yo decido hacerlo diferente"</p>
+    <div class="ig-links">
+      <a href="#">📷 ara.espacio.bienestar</a>
+      <a href="#">📷 sohamyogalv</a>
+      <a href="#">📷 enrebe_consciencia</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ FILOSOFÍA ═══════════════ -->
+<div id="page-filosofia" class="page">
+  <div class="page-header">
+    <h2>Bases Filosóficas</h2>
+    <p>Misión, Visión y Propósito de ENREBE</p>
+  </div>
+  <div class="content-block">
+    <div class="phil-trio">
+      <div class="phil-box">
+        <h4>Misión</h4>
+        <p>Proporcionarte de forma dinámica las herramientas para el crecimiento y la transformación personal que tanto deseas, con un entrenamiento de 21 días que reorganizará tus hábitos de pensamiento y comportamiento, obteniendo resultados progresivos desde un enfoque distinto y autodirigido.</p>
+      </div>
+      <div class="phil-box">
+        <h4>Visión</h4>
+        <p>ENREBE busca mantener en el tiempo los nuevos hábitos integrados que propendan a la persona a materializar una vida armoniosa en los aspectos personal y social, luego de la concientización e incorporación de cambios saludables en sus hábitos diarios.</p>
+      </div>
+      <div class="phil-box">
+        <h4>Propósito</h4>
+        <p>Al finalizar el entrenamiento serás capaz de reconocer en ti tus potencialidades únicas que te hacen valioso, capaz y exitoso en todas las áreas de tu vida.</p>
+      </div>
+    </div>
+    <div class="full-quote" style="margin-top:3rem;">
+      "Yo decido hacerlo diferente"
+    </div>
+    <div style="text-align:center; margin-top:3rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="showPage('tests')">Hacer un Test →</button>
+      <button class="btn btn-outline" style="border-color:var(--mid-green); color:var(--mid-green);" onclick="showPage('terapeutas')">Conocer Terapeutas →</button>
+    </div>
+  </div>
+  <footer>
+    <p>© 2023 ENREBE · "Yo decido hacerlo diferente"</p>
+    <div class="ig-links">
+      <a href="#">📷 ara.espacio.bienestar</a>
+      <a href="#">📷 sohamyogalv</a>
+      <a href="#">📷 enrebe_consciencia</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ TESTS ═══════════════ -->
+<div id="page-tests" class="page">
+  <div class="page-header">
+    <h2>Tests de Autoconocimiento</h2>
+    <p>Herramientas de diagnóstico para tu proceso de transformación</p>
+  </div>
+  <div class="content-block" style="padding-bottom:1rem;">
+    <div class="tests-intro">
+      <h3>¿Dónde estás hoy?</h3>
+      <p>Estos breves tests te ayudarán a identificar patrones, creencias y estados emocionales que influyen en tu bienestar. Son el punto de partida para tu entrenamiento ENREBE.</p>
+    </div>
+  </div>
+  <div class="test-cards">
+    <!-- ── TESTS EXTERNOS DE COMUNICACIÓN ── -->
+    <div class="test-card" style="border-left-color: var(--leaf-green); background: linear-gradient(135deg, #fff 80%, rgba(109,191,130,.06));">
+      <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:.5rem;">
+        <span style="font-size:1.3rem;">🗣</span>
+        <span style="font-size:.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--leaf-green); font-weight:700;">Test Completo · 20 preguntas</span>
+      </div>
+      <h4>Comunicación Asertiva</h4>
+      <p>Descubre tu perfil de asertividad: cómo expresas opiniones, pones límites, manejas conflictos y te afirmas ante el mundo.</p>
+      <a href="https://enrebe.github.io/test/test-asertividad-whatsapp.html" class="btn-small" style="display:inline-block; text-decoration:none; margin-top:.5rem;">Ir al Test →</a>
+    </div>
+
+    <div class="test-card" style="border-left-color: var(--leaf-green); background: linear-gradient(135deg, #fff 80%, rgba(109,191,130,.06));">
+      <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:.5rem;">
+        <span style="font-size:1.3rem;">💚</span>
+        <span style="font-size:.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--leaf-green); font-weight:700;">Test Completo · 20 preguntas</span>
+      </div>
+      <h4>Comunicación Afectiva</h4>
+      <p>Evalúa cómo vives y expresas el afecto: dar y recibir cariño, gestionar la vulnerabilidad y crear vínculos seguros.</p>
+      <a href="https://enrebe.github.io/test/test-comunicacion-afectiva-whatsapp.html" class="btn-small" style="display:inline-block; text-decoration:none; margin-top:.5rem;">Ir al Test →</a>
+    </div>
+
+    <div class="test-card" style="border-left-color: var(--leaf-green); background: linear-gradient(135deg, #fff 80%, rgba(109,191,130,.06));">
+      <div style="display:flex; align-items:center; gap:.6rem; margin-bottom:.5rem;">
+        <span style="font-size:1.3rem;">💬</span>
+        <span style="font-size:.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--leaf-green); font-weight:700;">Test Completo · 20 preguntas</span>
+      </div>
+      <h4>Comunicación Efectiva</h4>
+      <p>Mide la calidad de tu comunicación: claridad del mensaje, escucha activa, adaptación al interlocutor y manejo del feedback.</p>
+      <a href="https://enrebe.github.io/test/test-comunicacion-efectiva-whatsapp.html" class="btn-small" style="display:inline-block; text-decoration:none; margin-top:.5rem;">Ir al Test →</a>
+    </div>
+
+    <div class="test-card">
+      <h4>Test de Creencias Limitantes</h4>
+      <p>Identifica las creencias que frenan tu crecimiento personal y profesional, y cómo impactan tus decisiones diarias.</p>
+      <button class="btn-small" onclick="openQuiz('creencias')">Comenzar Test</button>
+    </div>
+    <div class="test-card">
+      <h4>Evaluación de Estado Emocional</h4>
+      <p>Mide tu bienestar emocional actual y descubre qué áreas necesitan más atención y cuidado.</p>
+      <button class="btn-small" onclick="openQuiz('emocional')">Comenzar Test</button>
+    </div>
+    <div class="test-card">
+      <h4>Test de Nivel de Estrés</h4>
+      <p>Evalúa cómo el estrés está afectando tu sistema nervioso, endocrino e inmune en este momento.</p>
+      <button class="btn-small" onclick="openQuiz('estres')">Comenzar Test</button>
+    </div>
+    <div class="test-card">
+      <h4>Diagnóstico de Hábitos</h4>
+      <p>Analiza tus rutinas diarias de alimentación, descanso y movimiento para detectar áreas de mejora.</p>
+      <button class="btn-small" onclick="openQuiz('habitos')">Comenzar Test</button>
+    </div>
+    <div class="test-card">
+      <h4>Test de Mindfulness</h4>
+      <p>Descubre tu nivel actual de atención consciente y cómo practicar el mindfulness puede transformar tu vida.</p>
+      <button class="btn-small" onclick="openQuiz('mindfulness')">Comenzar Test</button>
+    </div>
+    <div class="test-card">
+      <h4>Escala de Bienestar ENREBE</h4>
+      <p>Evaluación integral de los tres ejes del método: emocional, bioquímico y espiritual.</p>
+      <button class="btn-small" onclick="openQuiz('bienestar')">Comenzar Test</button>
+    </div>
+  </div>
+  <footer>
+    <p>© 2023 ENREBE · "Yo decido hacerlo diferente"</p>
+    <div class="ig-links">
+      <a href="#">📷 ara.espacio.bienestar</a>
+      <a href="#">📷 sohamyogalv</a>
+      <a href="#">📷 enrebe_consciencia</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ TERAPEUTAS ═══════════════ -->
+<div id="page-terapeutas" class="page">
+  <div class="page-header">
+    <h2>Nuestros Terapeutas</h2>
+    <p>El equipo profesional detrás de ENREBE</p>
+  </div>
+  <div class="content-block" style="padding-bottom:1rem;">
+    <div class="therapists-intro">
+      <h3>Guías en tu Transformación</h3>
+      <p>Profesionales certificados con formación multidisciplinaria, comprometidos con acompañarte en tu proceso de resignificación personal.</p>
+    </div>
+  </div>
+  <div class="therapist-table-wrap">
+    <table class="therapists">
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>Terapeuta</th>
+          <th>Hoja de Vida</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ── TERAPEUTA 1: ADRIANNA RIZZO ── -->
+        <tr>
+          <td>
+            <!-- FOTO: reemplaza el src con la ruta de tu imagen, ej: src="AdriannaRizzo.jpg" -->
+            <div class="t-photo">
+              <img src="AdriannaRizzo.jpg" alt="Adrianna Rizzo"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <svg style="display:none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            </div>
+          </td>
+          <td>
+            <div class="t-name">Adrianna Rizzo</div>
+            <div class="t-role">Cofundadora · Facilitadora ENREBE</div>
+          </td>
+          <td>
+            <div class="t-cv">
+              Especialista en desarrollo humano y bienestar integral, con amplia formación multidisciplinaria orientada al acompañamiento terapéutico y la transformación personal.
+              <ul>
+                <li>Magíster en Talento Humano</li>
+                <li>Especialista en Seguridad, Salud y Control de Riesgo</li>
+                <li>Naturóloga</li>
+                <li>Asesora en Desarrollo Humano</li>
+                <li>Canal Maestro en Sanación Sistémica (Constelaciones Familiares)</li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+        <!-- ── TERAPEUTA 2: GABRIEL DÍAZ ── -->
+        <tr>
+          <td>
+            <!-- FOTO: reemplaza el src con la ruta de tu imagen, ej: src="GabrielDiaz.jpg" -->
+            <div class="t-photo">
+              <img src="GabrielDiaz.jpg" alt="Gabriel Díaz"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <svg style="display:none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            </div>
+          </td>
+          <td>
+            <div class="t-name">Gabriel Díaz</div>
+            <div class="t-role">Cofundador · Psicólogo Clínico</div>
+          </td>
+          <td>
+            <div class="t-cv">
+              Profesional de la conducta humana con formación clínica y comunicacional, especializado en herramientas de transformación personal y sistémica.
+              <ul>
+                <li>Psicólogo Clínico</li>
+                <li>Lcdo. en Comunicación Social</li>
+                <li>Practitioner en Programación Neurolingüística (PNL)</li>
+                <li>Constelador Familiar</li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+        <!-- ── TERAPEUTA 3: HERNÁN MORENO ── -->
+        <tr>
+          <td>
+            <!-- FOTO: reemplaza el src con la ruta de tu imagen, ej: src="HernanMoreno_Hernan.jpg" -->
+            <div class="t-photo">
+              <img src="HernanMoreno_Hernan.jpg" alt="Hernán Moreno"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <svg style="display:none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            </div>
+          </td>
+          <td>
+            <div class="t-name">Hernán Moreno</div>
+            <div class="t-role">Cofundador · Coordinación &amp; Diseño</div>
+          </td>
+          <td>
+            <div class="t-cv">
+              Profesional técnico con vocación de servicio y enfoque en el bienestar integral, que integra la tecnología, el movimiento consciente y la transformación emocional.
+              <ul>
+                <li>Ingeniero en Telecomunicaciones</li>
+                <li>Practitioner en Programación Neurolingüística (PNL)</li>
+                <li>Terapeuta en Biodescodificación Emocional</li>
+                <li>Instructor de Yoga &amp; Meditación Inbound – 200 hrs.</li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer>
+    <p>© 2023 ENREBE · "Yo decido hacerlo diferente"</p>
+    <div class="ig-links">
+      <a href="#">📷 ara.espacio.bienestar</a>
+      <a href="#">📷 sohamyogalv</a>
+      <a href="#">📷 enrebe_consciencia</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════ QUIZ MODAL ═══════════════ -->
+<div class="quiz-overlay" id="quiz-overlay">
+  <div class="quiz-modal" id="quiz-modal">
+    <div class="quiz-header">
+      <h3 id="quiz-title">Test</h3>
+      <button class="quiz-close" onclick="closeQuiz()">✕</button>
+    </div>
+    <div class="quiz-body" id="quiz-body"></div>
+    <div class="quiz-result" id="quiz-result">
+      <div class="score-circle"><span class="num" id="score-num">0</span><span class="lbl">/ 100</span></div>
+      <h4 id="result-title"></h4>
+      <p id="result-text"></p>
+      <br>
+      <button class="quiz-submit" onclick="closeQuiz()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PAGE ROUTING ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+  return false;
+}
+
+// ── QUIZZES DATA ──
+const quizzes = {
+  creencias: {
+    title: '🌱 Test de Creencias Limitantes',
+    questions: [
+      { q: '¿Con qué frecuencia sientes que no eres suficientemente bueno/a para alcanzar tus metas?', opts: ['Casi nunca', 'A veces', 'Con frecuencia', 'Casi siempre'] },
+      { q: '¿Crees que el éxito está reservado para cierto tipo de personas, no para ti?', opts: ['Para nada', 'Raramente', 'A veces lo pienso', 'Frecuentemente'] },
+      { q: '¿Pospones decisiones importantes por miedo al fracaso o al juicio de otros?', opts: ['Nunca', 'Rara vez', 'Habitualmente', 'Siempre'] },
+      { q: '¿Tiendes a pensar que cuando algo sale mal es culpa tuya exclusivamente?', opts: ['Nunca', 'A veces', 'Frecuentemente', 'Siempre'] },
+      { q: '¿Sientes que no mereces cosas buenas en tu vida?', opts: ['Nunca', 'Raramente', 'Ocasionalmente', 'Seguido'] },
+    ],
+    interpret: s => s < 30 ? { t: '¡Excelente! Pocas creencias limitantes', r: 'Tu sistema de creencias es mayormente positivo. ENREBE te ayudará a potenciar aún más tus fortalezas y mantener este equilibrio.' } :
+      s < 60 ? { t: 'Creencias limitantes moderadas', r: 'Hay algunas creencias que merecen tu atención. El entrenamiento ENREBE te dará herramientas concretas de PNL y Mindfulness para resignificarlas.' } :
+      { t: 'Creencias limitantes significativas', r: 'Estas creencias están impactando tu vida cotidiana. Este es exactamente el punto de partida que ENREBE trabaja: reconocer, integrar y soltar para avanzar con fuerza interior.' }
+  },
+  emocional: {
+    title: '💚 Evaluación de Estado Emocional',
+    questions: [
+      { q: '¿Cómo describirías tu estado de ánimo general durante la última semana?', opts: ['Muy positivo', 'Estable', 'Variable', 'Predominantemente bajo'] },
+      { q: '¿Con qué facilidad recuperas tu equilibrio emocional tras una situación difícil?', opts: ['Muy fácilmente', 'En poco tiempo', 'Me cuesta bastante', 'Me cuesta mucho'] },
+      { q: '¿Cuán satisfecho/a te sientes con tus relaciones interpersonales?', opts: ['Muy satisfecho/a', 'Bastante', 'Poco', 'Insatisfecho/a'] },
+      { q: '¿Sientes que tienes control sobre tus reacciones emocionales?', opts: ['Sí, generalmente', 'A veces', 'Raramente', 'Casi nunca'] },
+      { q: '¿Experimentas alegría o satisfacción en tu vida cotidiana?', opts: ['Con frecuencia', 'Ocasionalmente', 'Poco', 'Casi nunca'] },
+    ],
+    interpret: s => s < 30 ? { t: 'Bienestar emocional elevado', r: 'Tu gestión emocional es sólida. ENREBE puede ayudarte a profundizar este bienestar y sostenerlo en el tiempo.' } :
+      s < 60 ? { t: 'Bienestar emocional en proceso', r: 'Tienes recursos emocionales, pero hay áreas por fortalecer. Las técnicas de Mindfulness y PNL de ENREBE serán muy valiosas para ti.' } :
+      { t: 'El bienestar emocional necesita atención', r: 'Este es el momento de iniciar un proceso de cambio. ENREBE está diseñado exactamente para este punto: acompañarte a resignificar y reconstruir tu equilibrio emocional.' }
+  },
+  estres: {
+    title: '⚡ Test de Nivel de Estrés',
+    questions: [
+      { q: '¿Con qué frecuencia sientes tensión física (contracturas, dolores de cabeza, insomnio)?', opts: ['Raramente', 'A veces', 'Frecuentemente', 'Constantemente'] },
+      { q: '¿Sientes que tienes demasiadas responsabilidades y poco tiempo?', opts: ['No, generalmente', 'Ocasionalmente', 'Frecuentemente', 'Siempre'] },
+      { q: '¿Cómo es tu calidad de sueño en general?', opts: ['Muy buena', 'Aceptable', 'Regular', 'Mala'] },
+      { q: '¿Con qué frecuencia te sientes irritable o con poca paciencia?', opts: ['Raramente', 'Poco', 'Bastante', 'Todo el tiempo'] },
+      { q: '¿Utilizas alguna práctica para manejar el estrés actualmente?', opts: ['Sí, regularmente', 'A veces', 'Raramente', 'No tengo ninguna'] },
+    ],
+    interpret: s => s < 30 ? { t: 'Estrés bajo y manejado', r: 'Tienes buenas herramientas de manejo del estrés. ENREBE puede darte nuevas prácticas para mantener y profundizar este equilibrio.' } :
+      s < 60 ? { t: 'Estrés moderado', r: 'El estrés está presente pero aún manejable. Las rutinas de Mindfulness y Yoga Inbound de ENREBE te darán recursos adicionales para regularlo mejor.' } :
+      { t: 'Estrés elevado', r: 'Tu sistema nervioso e inmune están bajo presión. ENREBE integra técnicas específicas —Mindfulness, Yoga Inbound y Alimentación Consciente— para restaurar el equilibrio organísmico.' }
+  },
+  habitos: {
+    title: '🌿 Diagnóstico de Hábitos',
+    questions: [
+      { q: '¿Cuántas comidas al día realizas con atención plena, sin distracciones?', opts: ['Todas o casi todas', '2 al día', '1 al día', 'Ninguna'] },
+      { q: '¿Realizas algún tipo de actividad física o movimiento consciente regularmente?', opts: ['Sí, diariamente', '3-4 veces por semana', '1-2 veces', 'Raramente'] },
+      { q: '¿Cuántas horas de sueño reparador tienes en promedio?', opts: ['7-8 horas', '6-7 horas', '5-6 horas', 'Menos de 5'] },
+      { q: '¿Con qué frecuencia incluyes un momento de silencio o reflexión en tu día?', opts: ['A diario', 'A veces', 'Raramente', 'Nunca'] },
+      { q: '¿Cómo calificarías tu nivel de hidratación y consumo de agua?', opts: ['Excelente', 'Bueno', 'Regular', 'Deficiente'] },
+    ],
+    interpret: s => s < 30 ? { t: 'Hábitos saludables bien establecidos', r: 'Tienes una base muy sólida. ENREBE puede ayudarte a integrar la dimensión emocional y espiritual a estos hábitos.' } :
+      s < 60 ? { t: 'Hábitos en construcción', r: 'Tienes algunos hábitos positivos pero hay áreas de mejora claras. El entrenamiento de 21 días de ENREBE es ideal para crear nuevos patrones.' } :
+      { t: 'Hábitos que necesitan reorganización', r: 'Hay una oportunidad real de transformación. ENREBE está diseñado para reorganizar hábitos de pensamiento y comportamiento con resultados progresivos.' }
+  },
+  mindfulness: {
+    title: '🧘 Test de Mindfulness',
+    questions: [
+      { q: '¿Con qué frecuencia prestas atención plena a lo que estás haciendo en el momento presente?', opts: ['Muy frecuentemente', 'A veces', 'Raramente', 'Casi nunca'] },
+      { q: '¿Puedes observar tus pensamientos sin identificarte completamente con ellos?', opts: ['Sí, con facilidad', 'A veces', 'Me cuesta', 'No puedo'] },
+      { q: '¿Cuando comes, prestas atención a los sabores, texturas y sensaciones?', opts: ['Siempre', 'A veces', 'Raramente', 'Nunca'] },
+      { q: '¿Puedes mantenerte en el presente sin que tu mente viaje constantemente al pasado o futuro?', opts: ['Generalmente sí', 'A veces', 'Con dificultad', 'Casi nunca'] },
+      { q: '¿Practicas alguna forma de meditación o atención consciente actualmente?', opts: ['Sí, regularmente', 'Ocasionalmente', 'Lo intenté', 'Nunca'] },
+    ],
+    interpret: s => s < 30 ? { t: 'Alto nivel de atención consciente', r: 'Tienes una práctica de mindfulness bien desarrollada. ENREBE puede darte nuevas dimensiones y profundidad a tu práctica actual.' } :
+      s < 60 ? { t: 'Mindfulness en desarrollo', r: 'Tienes semillas de atención consciente. El entrenamiento ENREBE cultivará y fortalecerá estas habilidades de manera sistemática en 21 días.' } :
+      { t: 'El mindfulness puede transformar tu vida', r: 'La práctica del mindfulness aún no forma parte de tu rutina. ENREBE comienza exactamente aquí: construyendo la base de la atención consciente que cambiará tu relación con el presente.' }
+  },
+  bienestar: {
+    title: '🌳 Escala de Bienestar ENREBE',
+    questions: [
+      { q: 'Eje Emocional: ¿Cómo valoras tu bienestar emocional general hoy?', opts: ['Muy alto', 'Alto', 'Moderado', 'Bajo'] },
+      { q: 'Eje Bioquímico: ¿Cómo valoras tu energía física, digestión y calidad de sueño?', opts: ['Muy buena', 'Buena', 'Regular', 'Deficiente'] },
+      { q: 'Eje Espiritual: ¿Sientes conexión con un propósito o sentido de vida?', opts: ['Clara y fuerte', 'En desarrollo', 'Difusa', 'No la siento'] },
+      { q: '¿Sientes que tus pensamientos, emociones y acciones están alineados?', opts: ['Sí, frecuentemente', 'A veces', 'Pocas veces', 'Casi nunca'] },
+      { q: '¿Cómo defines tu disposición al cambio y al crecimiento personal hoy?', opts: ['Muy alta', 'Alta', 'Moderada', 'Baja'] },
+    ],
+    interpret: s => s < 30 ? { t: 'Bienestar Integral Elevado', r: 'Los tres ejes de ENREBE están funcionando de manera armoniosa. El entrenamiento te dará herramientas para sostener y profundizar este estado.' } :
+      s < 60 ? { t: 'Bienestar Integral en Proceso', r: 'Hay un equilibrio relativo, pero con potencial de crecimiento en alguno de los tres ejes. ENREBE trabajará los tres de manera integrada.' } :
+      { t: 'Oportunidad de Transformación Integral', r: 'Los tres ejes de bienestar necesitan atención. Esto no es un problema: es exactamente el punto de partida de ENREBE. "Yo decido hacerlo diferente" empieza aquí.' }
+  }
+};
+
+function openQuiz(id) {
+  const q = quizzes[id];
+  document.getElementById('quiz-title').textContent = q.title;
+  document.getElementById('quiz-result').style.display = 'none';
+  let html = '';
+  q.questions.forEach((qq, i) => {
+    html += `<div class="quiz-q"><p>${i+1}. ${qq.q}</p>`;
+    qq.opts.forEach((opt, j) => {
+      html += `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`;
+    });
+    html += '</div>';
+  });
+  html += `<button class="quiz-submit" onclick="submitQuiz('${id}')">Ver Resultado</button>`;
+  document.getElementById('quiz-body').innerHTML = html;
+  document.getElementById('quiz-overlay').classList.add('open');
+}
+
+function submitQuiz(id) {
+  const q = quizzes[id];
+  let total = 0, answered = 0;
+  q.questions.forEach((_, i) => {
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if (sel) { total += parseInt(sel.value); answered++; }
+  });
+  if (answered < q.questions.length) { alert('Por favor responde todas las preguntas.'); return; }
+  const score = Math.round((total / (q.questions.length * 3)) * 100);
+  const interp = q.interpret(score);
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('result-title').textContent = interp.t;
+  document.getElementById('result-text').textContent = interp.r;
+  document.getElementById('quiz-body').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'block';
+}
+
+function closeQuiz() {
+  document.getElementById('quiz-overlay').classList.remove('open');
+  document.getElementById('quiz-body').style.display = 'block';
+}
+</script>
+</body>
+</html>
