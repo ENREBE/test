@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de Comunicación Asertiva · Versión II</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3ED;
+    --ink: #1A1410;
+    --rust: #C4522A;
+    --sage: #5A7A5E;
+    --gold: #D4A843;
+    --mist: #E8E2D9;
+    --warm-gray: #8C7B6E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(196,82,42,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(90,122,94,0.08) 0%, transparent 60%);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 80px);
+    line-height: 1.05;
+    font-weight: 700;
+    color: var(--ink);
+    max-width: 700px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em { font-style: italic; color: var(--rust); }
+
+  .hero-subtitle {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 36px;
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .meta-item { text-align: center; }
+  .meta-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+  }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+  .meta-sep { width: 1px; background: var(--mist); align-self: stretch; }
+
+  .start-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    border: none;
+    padding: 18px 48px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+
+  .start-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--rust);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .start-btn:hover::after { transform: translateX(0); }
+  .start-btn span { position: relative; z-index: 1; }
+
+  .decoration {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    font-weight: 700;
+    color: rgba(196,82,42,0.04);
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+  }
+  .decoration.left { left: -40px; bottom: 40px; }
+  .decoration.right { right: -20px; top: 60px; }
+
+  #test-section { display: none; min-height: 100vh; padding: 60px 24px 80px; }
+  .test-container { max-width: 760px; margin: 0 auto; }
+
+  .progress-bar-wrap { margin-bottom: 56px; }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .progress-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--warm-gray); }
+  .progress-count { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--ink); }
+  .progress-track { height: 2px; background: var(--mist); position: relative; }
+  .progress-fill {
+    height: 100%;
+    background: var(--rust);
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -4px; top: -3px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--rust);
+  }
+
+  .category-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rust);
+    border: 1px solid rgba(196,82,42,0.3);
+    padding: 5px 14px;
+    margin-bottom: 24px;
+  }
+
+  .question-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--warm-gray);
+    margin-bottom: 16px;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 30px);
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 48px;
+    min-height: 80px;
+  }
+
+  .options-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 48px; }
+
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    background: white;
+    border: 1.5px solid var(--mist);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: var(--rust);
+    transition: width 0.3s;
+  }
+  .option-btn:hover { border-color: var(--rust); transform: translateX(4px); }
+  .option-btn:hover::before { width: 3px; }
+  .option-btn.selected { border-color: var(--rust); background: rgba(196,82,42,0.04); }
+  .option-btn.selected::before { width: 3px; }
+  .option-value { display: none; }
+  .option-text { font-size: 15px; font-weight: 400; color: var(--ink); line-height: 1.4; }
+
+  .nav-buttons { display: flex; justify-content: space-between; align-items: center; }
+  .nav-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .nav-btn:hover:not(:disabled) { background: var(--ink); color: var(--cream); }
+  .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .nav-btn.primary { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .nav-btn.primary:hover { background: var(--rust); border-color: var(--rust); }
+
+  #results-section { display: none; min-height: 100vh; padding: 0; }
+
+  .results-hero {
+    padding: 80px 24px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--mist);
+    position: relative;
+    overflow: hidden;
+  }
+  .results-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(196,82,42,0.06) 0%, transparent 70%);
+  }
+
+  .result-eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .result-level-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 68px);
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .result-level-name em { font-style: italic; color: var(--rust); }
+
+  .score-ring-container {
+    position: relative;
+    width: 160px; height: 160px;
+    margin: 40px auto 32px;
+  }
+  .score-ring-container svg { transform: rotate(-90deg); }
+  .score-ring-track { fill: none; stroke: var(--mist); stroke-width: 8; }
+  .score-ring-fill {
+    fill: none;
+    stroke: var(--rust);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .score-number { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: var(--ink); line-height: 1; }
+  .score-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-gray); margin-top: 4px; }
+
+  .results-content { max-width: 760px; margin: 0 auto; padding: 60px 24px 80px; }
+
+  .result-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--warm-gray);
+    text-align: center;
+    margin-bottom: 60px;
+    line-height: 1.5;
+  }
+
+  .result-block { margin-bottom: 48px; }
+  .result-block-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .result-block-label::after { content: ''; flex: 1; height: 1px; background: var(--mist); }
+  .result-block p { font-size: 16px; line-height: 1.8; color: var(--ink); font-weight: 300; }
+  .result-block strong { font-weight: 500; }
+
+  .dimensions-grid { display: grid; gap: 20px; margin-bottom: 48px; }
+  .dimension-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .dimension-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .dimension-pct { font-family: 'Playfair Display', serif; font-size: 14px; color: var(--rust); }
+  .dimension-bar { height: 3px; background: var(--mist); }
+  .dimension-bar-fill { height: 100%; background: var(--rust); transition: width 1.2s cubic-bezier(0.4,0,0.2,1); width: 0; }
+
+  .level-range {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 60px;
+  }
+  .level-item { padding: 16px 10px; text-align: center; border: 1px solid var(--mist); position: relative; }
+  .level-item.active { border-color: var(--rust); background: rgba(196,82,42,0.04); }
+  .level-item.active::after {
+    content: '▼';
+    position: absolute;
+    bottom: -20px; left: 50%;
+    transform: translateX(-50%);
+    color: var(--rust); font-size: 12px;
+  }
+  .level-item-name { font-size: 11px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .level-item-range { font-size: 10px; color: var(--warm-gray); }
+
+  .restart-btn {
+    display: block;
+    margin: 0 auto;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--ink);
+    border: none;
+    padding: 18px 48px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: center;
+  }
+  .restart-btn:hover { background: var(--rust); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { opacity: 0; animation: fadeUp 0.5s forwards; }
+
+  @media (max-width: 480px) {
+    .level-range { grid-template-columns: repeat(3, 1fr); }
+    .hero-meta { gap: 20px; }
+    .meta-num { font-size: 22px; }
+  }
+
+  .wa-btn-wrap { margin: 0 auto 20px; text-align: center; }
+  .wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 18px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+  .wa-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #128C7E;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .wa-btn:hover::after { transform: translateX(0); }
+  .wa-btn span, .wa-btn svg { position: relative; z-index: 1; }
+  .wa-note { font-size: 12px; color: var(--warm-gray); margin-top: 10px; font-weight: 300; }
+
+  /* Nombre input */
+  .name-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.75s forwards;
+  }
+  .name-row {
+    display: flex;
+    gap: 12px;
+  }
+  .name-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 6px;
+  }
+  .name-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    text-align: left;
+  }
+  .name-input {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+    background: white;
+    border: 1.5px solid var(--mist);
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.25s;
+    width: 100%;
+  }
+  .name-input:focus { border-color: var(--rust); }
+  .name-input::placeholder { color: var(--mist); }
+  .name-error {
+    font-size: 12px;
+    color: var(--rust);
+    text-align: left;
+    display: none;
+    margin-top: -8px;
+  }
+  .name-error.visible { display: block; }
+
+  /* Nombre en test header */
+  .test-user-name {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    text-align: right;
+    margin-bottom: 32px;
+  }
+  .test-user-name span { color: var(--rust); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="decoration left">A</div>
+  <div class="decoration right">?</div>
+  <p class="hero-eyebrow">Evaluación Psicológica · Comunicación</p>
+  <h1 class="hero-title">¿Cómo habla realmente tu <em>voz interior</em>?</h1>
+  <p class="hero-subtitle">20 situaciones que revelan cómo te expresas, defiendes tus necesidades y habitas tus relaciones. No hay respuestas correctas — hay respuestas tuyas.</p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-num">20</span>
+      <span class="meta-label">Situaciones</span>
+    </div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">
+      <span class="meta-num">10</span>
+      <span class="meta-label">Dimensiones</span>
+    </div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">
+      <span class="meta-num">~8'</span>
+      <span class="meta-label">Duración</span>
+    </div>
+  </div>
+  <div class="name-form">
+    <div class="name-row">
+      <div class="name-field">
+        <label class="name-label" for="input-nombre">Nombre</label>
+        <input class="name-input" id="input-nombre" type="text" placeholder="Tu nombre" autocomplete="given-name" maxlength="40"/>
+      </div>
+      <div class="name-field">
+        <label class="name-label" for="input-apellido">Apellido</label>
+        <input class="name-input" id="input-apellido" type="text" placeholder="Tu apellido" autocomplete="family-name" maxlength="40"/>
+      </div>
+    </div>
+    <p class="name-error" id="name-error">Por favor ingresa tu nombre y apellido para continuar.</p>
+  </div>
+  <button class="start-btn" onclick="startTest()"><span>Comenzar evaluación →</span></button>
+</section>
+
+<!-- TEST -->
+<section id="test-section">
+  <div class="test-container">
+    <div class="progress-bar-wrap">
+      <div class="progress-top">
+        <span class="progress-label">Progreso</span>
+        <span class="progress-count" id="progress-count">1 / 20</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:5%"></div>
+      </div>
+    </div>
+
+    <div class="test-user-name" id="test-user-name"></div>
+
+    <div id="question-card">
+      <div class="category-badge" id="q-category"></div>
+      <p class="question-number" id="q-number"></p>
+      <h2 class="question-text" id="q-text"></h2>
+      <div class="options-grid" id="options-grid"></div>
+      <div class="nav-buttons">
+        <button class="nav-btn" id="btn-prev" onclick="prevQuestion()" disabled>← Anterior</button>
+        <button class="nav-btn primary" id="btn-next" onclick="nextQuestion()" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results-section">
+  <div class="results-hero">
+    <p class="result-eyebrow">Tu perfil de comunicación</p>
+    <h1 class="result-level-name" id="result-title"></h1>
+    <div class="score-ring-container">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle class="score-ring-track" cx="80" cy="80" r="68"/>
+        <circle class="score-ring-fill" id="score-ring" cx="80" cy="80" r="68"
+          stroke-dasharray="427" stroke-dashoffset="427"/>
+      </svg>
+      <div class="score-center">
+        <span class="score-number" id="score-display">0</span>
+        <span class="score-label">puntos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-content">
+    <p class="result-tagline" id="result-tagline"></p>
+
+    <div class="result-block-label" style="margin-bottom:24px;">Tu posición en el espectro</div>
+    <div class="level-range" id="level-range"></div>
+    <br><br>
+
+    <div class="result-block-label">Dimensiones evaluadas</div>
+    <div class="dimensions-grid" id="dimensions-grid"></div>
+
+    <div class="result-block">
+      <div class="result-block-label">Análisis reflexivo</div>
+      <p id="result-reflection"></p>
+    </div>
+
+    <div class="result-block">
+      <div class="result-block-label">Tus fortalezas</div>
+      <p id="result-strengths"></p>
+    </div>
+
+    <div class="result-block">
+      <div class="result-block-label">Pasos para crecer</div>
+      <p id="result-recommendations"></p>
+    </div>
+
+    <div class="wa-btn-wrap">
+      <a id="wa-result-btn" class="wa-btn" href="#" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span>📊 Enviar mi resultado por WhatsApp</span>
+      </a>
+      <p class="wa-note">Se abrirá WhatsApp con tu resultado listo para enviar</p>
+    </div>
+
+    <button class="restart-btn" onclick="restartTest()">Realizar el test de nuevo</button>
+  </div>
+</section>
+
+<script>
+/*
+ * DOBLE SESGO — ESTRATEGIA APLICADA
+ * ─────────────────────────────────────────────────────────────────────────
+ * Las 20 preguntas están diseñadas en cuatro modalidades para que
+ * el patrón de respuesta "correcto" sea impredecible:
+ *
+ * A) ESCALA DIRECTA: las opciones van de menor a mayor asertividad.
+ *    El valor 5 = conducta más asertiva. (10 preguntas)
+ *
+ * B) ESCALA INVERTIDA: la pregunta describe un patrón evitativo o
+ *    de bloqueo, y las opciones van de "nunca ocurre" (valor 5, más
+ *    asertivo) a "siempre ocurre" (valor 1, menos asertivo).
+ *    El valor asignado internamente se invierte en el cálculo. (6 preguntas)
+ *
+ * C) ESCALA DE FRECUENCIA MIXTA: la pregunta mide frecuencia
+ *    ("¿con qué frecuencia…?") y las opciones no tienen orden obvio
+ *    de "bueno/malo" — el evaluado debe interpretar. (4 preguntas)
+ *
+ * Las opciones de TODAS las preguntas se barajan aleatoriamente
+ * en cada sesión, eliminando el efecto de posición.
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+const questions = [
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 1 · Expresión de opiniones
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 1,
+    category: "Expresión de opiniones",
+    // Tipo C — frecuencia mixta: ninguna opción parece "la correcta" a simple vista
+    text: "Imagina que llevas semanas pensando algo sobre una relación importante —laboral o personal— pero no lo has dicho. ¿Qué suele estar ocurriendo internamente?",
+    options: [
+      { value: 2, text: "Tengo el mensaje claro pero espero el momento perfecto que nunca termina de llegar." },
+      { value: 4, text: "Lo sopeso, lo valoro, y cuando lo considero necesario, lo digo aunque incomode." },
+      { value: 1, text: "Me convenzo de que probablemente no cambiará nada, así que para qué decirlo." },
+      { value: 3, text: "Lo expreso en partes, de forma indirecta, sin terminar de decirlo del todo." },
+      { value: 5, text: "Identifico cuándo guardo silencio por miedo y lo uso como señal para hablar." }
+    ]
+  },
+
+  {
+    id: 2,
+    category: "Expresión de opiniones",
+    // Tipo B — escala invertida: "¿con qué frecuencia cambias de opinión para complacer?"
+    text: "En una conversación, alguien rebate tu punto de vista con seguridad. Sin que te hayan dado un argumento nuevo, muestras el acuerdo con lo que dicen. ¿Con qué frecuencia ocurre esto?",
+    options: [
+      { value: 5, text: "Raramente — si no hay un argumento que lo justifique, sostengo mi posición." },
+      { value: 4, text: "Ocasionalmente — sobre todo cuando la otra persona tiene más autoridad." },
+      { value: 3, text: "Con cierta regularidad — la seguridad ajena me genera duda sobre lo propio." },
+      { value: 2, text: "Con bastante frecuencia — me resulta difícil sostener mi criterio bajo presión social." },
+      { value: 1, text: "Casi siempre — la incomodidad del desacuerdo me hace ceder aunque no lo crea." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 2 · Gestión de límites
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 3,
+    category: "Gestión de límites",
+    // Tipo A — escala directa
+    text: "Alguien a quien aprecias te pide algo que genuinamente no puedes o no quieres hacer. Lleva semanas pidiéndotelo. ¿Cuál es tu patrón habitual?",
+    options: [
+      { value: 1, text: "Termino cediendo aunque me haga daño, porque no soporto decepcionarlo/a." },
+      { value: 2, text: "Pongo excusas variadas para evitar el no directo indefinidamente." },
+      { value: 3, text: "Digo que intentaré hacerlo, sabiendo que probablemente no lo haré." },
+      { value: 4, text: "Le explico honestamente que no puedo, aunque me genere algo de culpa." },
+      { value: 5, text: "Declino con claridad y sin culpa — mi negativa no necesita justificación excesiva." }
+    ]
+  },
+
+  {
+    id: 4,
+    category: "Gestión de límites",
+    // Tipo B — invertida: el enunciado describe incapacidad para limitar
+    text: "¿Cuánto espacio ocupan las necesidades de los demás en tu agenda, tu energía y tu mente en comparación con las tuyas propias?",
+    options: [
+      { value: 1, text: "Las de los demás ocupan casi todo — las mías suelen quedar para lo que sobre." },
+      { value: 2, text: "Las de los demás pesan más, aunque me esfuerzo por equilibrarlo." },
+      { value: 3, text: "Depende del período — a veces me pierdo en las necesidades ajenas, otras no." },
+      { value: 4, text: "Hay equilibrio — atiendo a otros desde un lugar que no me vacía." },
+      { value: 5, text: "Soy consciente de mis límites de energía y los protejo como una práctica activa." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 3 · Manejo del conflicto
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 5,
+    category: "Manejo del conflicto",
+    // Tipo C — frecuencia mixta, la pregunta no revela cuál es la respuesta "buena"
+    text: "Tienes un conflicto sin resolver con alguien de tu entorno cercano. Han pasado varios días. ¿Qué está pasando en ti mientras tanto?",
+    options: [
+      { value: 2, text: "Estoy esperando que se enfríe antes de abordarlo — el tiempo lo suaviza." },
+      { value: 5, text: "Siento la incomodidad del pendiente y en algún momento tomo la iniciativa de abordarlo." },
+      { value: 1, text: "Espero que la otra persona lo resuelva o simplemente se olvide con el tiempo." },
+      { value: 3, text: "Lo abordo si me preguntan, pero no tomo la iniciativa yo primero." },
+      { value: 4, text: "Proceso lo que ocurrió, identifiqué lo que quiero comunicar y busco el momento." }
+    ]
+  },
+
+  {
+    id: 6,
+    category: "Manejo del conflicto",
+    // Tipo A — directa, pero la descripción de cada nivel es más sutil que "bueno/malo"
+    text: "Alguien te hace un comentario que sientes como irrespetuoso, pero podría interpretarse de varias formas. ¿Cómo lo manejas en el momento?",
+    options: [
+      { value: 1, text: "Lo paso por alto — prefiero creer que no fue con mala intención antes que armar un problema." },
+      { value: 2, text: "Lo dejo ir en el momento pero lo rumio internamente durante horas o días." },
+      { value: 3, text: "Hago un comentario ambiguo que puede interpretarse como respuesta o como broma." },
+      { value: 4, text: "Pregunto directamente qué quiso decir, sin asumir ni atacar." },
+      { value: 5, text: "Nombro lo que sentí con el comentario y ofrezco una interpretación para verificar." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 4 · Autoexpresión emocional
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 7,
+    category: "Autoexpresión emocional",
+    // Tipo B — invertida: describe el bloqueo emocional, no la apertura
+    text: "Piensa en la última vez que algo te afectó profundamente. ¿Cuántas personas en tu vida saben lo que sentiste realmente?",
+    options: [
+      { value: 1, text: "Nadie — proceso lo que siento en completa soledad y así prefiero que sea." },
+      { value: 2, text: "Una persona, y solo porque me preguntó de una forma en que no pude evitarlo." },
+      { value: 3, text: "Una o dos personas de confianza máxima, aunque omití los detalles más profundos." },
+      { value: 4, text: "Varias personas — no oculto lo que siento aunque tampoco lo anuncio a todos." },
+      { value: 5, text: "Las personas relevantes en esa situación — expreso lo que siento a quien corresponde." }
+    ]
+  },
+
+  {
+    id: 8,
+    category: "Autoexpresión emocional",
+    // Tipo A — directa con situación específica
+    text: "Llevas tiempo guardando una decepción hacia alguien cercano. Un día esa persona te pregunta cómo estás. ¿Qué ocurre?",
+    options: [
+      { value: 1, text: "Digo 'bien' automáticamente — no encuentro la forma ni el momento de decir otra cosa." },
+      { value: 2, text: "Digo algo vago como 'he tenido días complicados' sin profundizar." },
+      { value: 3, text: "Menciono que algo me ha estado pesando pero sin conectarlo con esa persona." },
+      { value: 4, text: "Le digo que hay algo que quiero contarle cuando tengamos un momento tranquilo." },
+      { value: 5, text: "Le digo directamente lo que siento, desde el 'yo', sin acusar pero sin minimizar." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 5 · Pedir y recibir
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 9,
+    category: "Pedir y recibir",
+    // Tipo C — el escenario de pedir ayuda pero redactado desde la autosuficiencia
+    text: "Estás sobrecargado/a con responsabilidades que podrías delegar o pedir ayuda para asumir. ¿Qué pasa dentro de ti cuando piensas en pedirla?",
+    options: [
+      { value: 1, text: "Me digo que es más fácil hacerlo yo — pedir ayuda implica explicar, esperar, corregir." },
+      { value: 2, text: "Siento que pedir es molestar — prefiero llegar al límite antes de recurrir a alguien." },
+      { value: 3, text: "Lo hago pero cargando con culpa o minimizando lo que pido para que parezca menos." },
+      { value: 4, text: "Pido cuando lo necesito, aunque me cueste un poco — lo considero parte de relacionarme." },
+      { value: 5, text: "Pedir es para mí una forma de confiar — lo hago sin drama ni culpa asociada." }
+    ]
+  },
+
+  {
+    id: 10,
+    category: "Pedir y recibir",
+    // Tipo B — invertida: describe la dificultad para recibir
+    text: "Alguien te dice algo genuinamente positivo sobre ti — no un elogio social, sino un reconocimiento que se siente verdadero. ¿Qué ocurre en ti?",
+    options: [
+      { value: 1, text: "Lo desvío, lo minimizo o busco un 'pero' que lo neutralice casi de inmediato." },
+      { value: 2, text: "Lo escucho pero me genera incomodidad — no sé muy bien qué hacer con eso." },
+      { value: 3, text: "Agradezco, aunque internamente no termino de creerlo del todo." },
+      { value: 4, text: "Lo recibo con gratitud genuina, aunque me tome un momento procesarlo." },
+      { value: 5, text: "Lo recibo sin neutralizarlo — puede quedarme, no necesito desarmarlo." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 6 · Comunicación en jerarquías
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 11,
+    category: "Comunicación en jerarquías",
+    // Tipo A — directa con escenario de desacuerdo profesional
+    text: "En una reunión con tu jefe u otra figura de autoridad, das una idea que es ignorada. Poco después alguien más la dice y recibe elogios. ¿Qué haces?",
+    options: [
+      { value: 1, text: "No digo nada — sería hacer el ridículo o parecer envidioso/a." },
+      { value: 2, text: "Lo comento con un colega después de la reunión pero no lo señalo en el espacio." },
+      { value: 3, text: "Doy una señal sutil de que la idea ya la había propuesto, sin decirlo directamente." },
+      { value: 4, text: "Señalo amablemente que esa idea la había mencionado antes, sin hacer un drama." },
+      { value: 5, text: "Lo nombro con naturalidad: 'Me alegra que eso resuene — lo planteé hace un momento.'" }
+    ]
+  },
+
+  {
+    id: 12,
+    category: "Comunicación en jerarquías",
+    // Tipo B — invertida: mide cuánto se apaga la voz ante el poder
+    text: "¿Cómo describirías la diferencia entre cómo te comunicas con tus pares y cómo lo haces ante figuras de poder o autoridad?",
+    options: [
+      { value: 1, text: "Es una diferencia radical — ante el poder casi no me reconozco como comunicador/a." },
+      { value: 2, text: "Soy notablemente más cauto/a, mido cada palabra y evito mostrar desacuerdo." },
+      { value: 3, text: "Algo más formal y cuidadoso/a, pero sigo pudiendo decir lo que pienso." },
+      { value: 4, text: "La diferencia es de tono, no de contenido — digo lo mismo con más registro." },
+      { value: 5, text: "Mi voz es esencialmente la misma — el cargo ajeno no apaga mi criterio." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 7 · Presencia y lenguaje no verbal
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 13,
+    category: "Presencia y lenguaje no verbal",
+    // Tipo C — frecuencia mixta desde el cuerpo, no desde el comportamiento observable
+    text: "Estás a punto de decir algo difícil o importante a alguien. ¿Qué hace tu cuerpo justo antes de hablar?",
+    options: [
+      { value: 3, text: "Me pongo levemente tenso/a pero lo manejo — es parte del proceso." },
+      { value: 1, text: "Se contrae, la voz baja, busco minimizar mi presencia física tanto como sea posible." },
+      { value: 5, text: "Me anclo: respiro, me ergo, tomo contacto con el piso — y hablo desde ahí." },
+      { value: 2, text: "Siento tensión considerable que a veces interfiere con cómo suena lo que digo." },
+      { value: 4, text: "La tensión está, pero ya no me domina — la reconozco y la dejo pasar." }
+    ]
+  },
+
+  {
+    id: 14,
+    category: "Presencia y lenguaje no verbal",
+    // Tipo A — directa con situación de interrupción
+    text: "Estás expresando algo importante y te interrumpen antes de terminar. Esto ocurre dos veces seguidas. ¿Qué haces?",
+    options: [
+      { value: 1, text: "Dejo ir lo que iba a decir — ya se interrumpió el hilo y no quiero insistir." },
+      { value: 2, text: "Espero que haya una pausa y reintento, pero si me vuelven a interrumpir, abandono." },
+      { value: 3, text: "Continúo hablando de todas formas, aunque me acelero y pierdo algo de claridad." },
+      { value: 4, text: "Señalo con calma que aún no terminé y retomo el hilo de lo que decía." },
+      { value: 5, text: "Paro, nombro lo que ocurre ('necesito terminar esta idea') y retomo con calma y contacto visual." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 8 · Negociación y compromisos
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 15,
+    category: "Negociación y compromisos",
+    // Tipo A — directa, escenario de negociación de condiciones propias
+    text: "Debes negociar algo que te afecta directamente: tu salario, las condiciones de un acuerdo, el reparto de responsabilidades en casa. ¿Cuál es tu punto de partida interno?",
+    options: [
+      { value: 1, text: "Lo que me ofrezcan está bien — negociar se siente agresivo o ingrato." },
+      { value: 2, text: "Tengo una posición pero la suelto rápido si noto resistencia o incomodidad en el otro." },
+      { value: 3, text: "Planteo algo, cedo en algunas cosas, y termino con un resultado mediocre que acepto." },
+      { value: 4, text: "Tengo clara mi posición mínima y la sostengo, aunque me genere tensión en el proceso." },
+      { value: 5, text: "Negocio desde mis intereses reales, escucho los ajenos y busco acuerdos sostenibles para ambos." }
+    ]
+  },
+
+  {
+    id: 16,
+    category: "Negociación y compromisos",
+    // Tipo B — invertida: mide acumulación de compromisos no queridos
+    text: "Repasa mentalmente los compromisos que tienes actualmente. ¿Cuántos de ellos surgieron de un sí genuino?",
+    options: [
+      { value: 1, text: "Pocos — la mayoría los asumí porque no supe o no pude decir que no en el momento." },
+      { value: 2, text: "Algunos — hay varios que acepté por presión social o por evitar la incomodidad del rechazo." },
+      { value: 3, text: "Aproximadamente la mitad — mezcla de compromisos elegidos y compromisos cedidos." },
+      { value: 4, text: "La mayoría — hay alguno que cedí, pero son la excepción, no la norma." },
+      { value: 5, text: "Prácticamente todos — tengo una práctica activa de no asumir lo que no elijo asumir." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 9 · Autoconfianza comunicativa
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 17,
+    category: "Autoconfianza comunicativa",
+    // Tipo C — la pregunta explora la fuente de la seguridad, no si existe o no
+    text: "¿De dónde viene principalmente la seguridad con la que te comunicas? Elige la opción que más se acerca a tu experiencia real.",
+    options: [
+      { value: 2, text: "De haber preparado muy bien lo que voy a decir — sin esa preparación me siento expuesto/a." },
+      { value: 4, text: "De una combinación entre prepararme y confiar en que puedo manejar lo que surja." },
+      { value: 1, text: "De que la otra persona esté de acuerdo — el desacuerdo me desestabiliza bastante." },
+      { value: 5, text: "De un lugar interno que no depende de la respuesta del otro — esté de acuerdo o no." },
+      { value: 3, text: "Del contexto y la audiencia — con algunas personas me siento seguro/a, con otras no." }
+    ]
+  },
+
+  {
+    id: 18,
+    category: "Autoconfianza comunicativa",
+    // Tipo A — directa, escenario de exposición pública
+    text: "Tienes que defender tu posición ante un grupo que mayoritariamente piensa diferente a ti y lo hace saber. ¿Qué ocurre?",
+    options: [
+      { value: 1, text: "Cedo o me retracto — sostener la posición ante el grupo me resulta demasiado costoso." },
+      { value: 2, text: "Mantengo una versión atenuada de mi posición para reducir la fricción." },
+      { value: 3, text: "Sostengo mi criterio pero con más ansiedad de la que me gustaría." },
+      { value: 4, text: "Defiendo mi posición con argumentos, aunque la presión grupal me genere algo de tensión." },
+      { value: 5, text: "La presión del grupo no modifica mi criterio — puedo escuchar y seguir sosteniendo el mío." }
+    ]
+  },
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // DIMENSIÓN 10 · Escucha asertiva
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  {
+    id: 19,
+    category: "Escucha asertiva",
+    // Tipo B — invertida: mide la reactividad defensiva ante feedback
+    text: "Alguien que conoces bien te da una retroalimentación sobre algo que hiciste que no te gustó hacer. No es un ataque — es una observación. ¿Qué ocurre en ti mientras la escuchas?",
+    options: [
+      { value: 1, text: "Una parte de mí ya está buscando por qué están equivocados antes de que terminen de hablar." },
+      { value: 2, text: "Escucho, pero internamente lo siento como un juicio a mi persona, no a mi conducta." },
+      { value: 3, text: "Lo proceso con incomodidad pero eventualmente logro separar el feedback de mi valor." },
+      { value: 4, text: "Escucho activamente y evalúo la observación con relativa apertura desde el principio." },
+      { value: 5, text: "Lo recibo con curiosidad genuina — me interesa entender su perspectiva, aunque no la comparta." }
+    ]
+  },
+
+  {
+    id: 20,
+    category: "Escucha asertiva",
+    // Tipo A — directa pero formulada desde la escucha, no desde el habla
+    text: "Estás en una conversación cargada emocionalmente donde tú también tienes mucho por decir. ¿Qué tipo de escucha describes en ti?",
+    options: [
+      { value: 1, text: "Escucho lo suficiente para saber cuándo puedo hablar — mi respuesta ya está lista desde antes." },
+      { value: 2, text: "Escucho, pero la ansiedad por responder hace que muchos detalles se me escapen." },
+      { value: 3, text: "Intento escuchar de verdad, aunque en momentos de alta intensidad me pierdo." },
+      { value: 4, text: "Escucho con presencia real y tomo nota mental de lo que necesito responder después." },
+      { value: 5, text: "Puedo escuchar completamente aunque tenga mucho que decir — el otro merece ser entendido primero." }
+    ]
+  }
+
+]; // fin questions
+
+
+// ── NIVELES ── idénticos al test original ──────────────────────────────
+const levels = [
+  {
+    name: "Comunicación Pasiva",
+    range: "20\u201339", min: 20, max: 39,
+    tagline: "Tu voz existe, pero a\u00fan no ha encontrado el espacio que merece.",
+    color: "#8C7B6E",
+    reflection: `Tu patr\u00f3n comunicativo refleja una <strong>tendencia a subordinar tus propias necesidades, opiniones y emociones</strong> ante el miedo al conflicto, al rechazo o a la desaprobaci\u00f3n. Esto no es una falla de car\u00e1cter \u2014 es una respuesta aprendida, frecuentemente forjada en entornos donde expresarse ten\u00eda consecuencias negativas. El resultado es que las personas en este nivel muchas veces acumulan resentimiento silencioso, sienten que no son escuchadas, y experimentan una sensaci\u00f3n persistente de invisibilidad.`,
+    strengths: `Tienes una gran capacidad para <strong>escuchar a los dem\u00e1s</strong>, para mantener la paz en momentos de tensi\u00f3n y para priorizar el bienestar del grupo. Tu sensibilidad emocional es un recurso genuino \u2014 el desaf\u00edo es ponerla tambi\u00e9n al servicio de ti mismo/a. Tambi\u00e9n es probable que seas percibido/a como alguien <strong>emp\u00e1tico/a, confiable y no amenazante</strong>, cualidades que tienen gran valor en las relaciones.`,
+    recommendations: `El primer paso no es confrontar al mundo \u2014 es comenzar a <strong>notar tus necesidades antes de suprimirlas</strong>. Practica expresar preferencias peque\u00f1as antes de abordar conversaciones m\u00e1s grandes. Trabaja la <strong>frase del \u201cyo\u201d</strong>: en lugar de \u201ces que t\u00fa siempre...\u201d, prueba \u201cyo me siento... cuando...\u201d. Considera el apoyo de un proceso terap\u00e9utico o de entrenamiento en asertividad para explorar las ra\u00edces de este patr\u00f3n.`
+  },
+  {
+    name: "Asertividad en Desarrollo",
+    range: "40\u201359", min: 40, max: 59,
+    tagline: "Conoces tu voz. Ahora est\u00e1s aprendiendo a confiar en ella.",
+    color: "#D4A843",
+    reflection: `Te encuentras en una etapa de <strong>transici\u00f3n activa</strong>: ya reconoces cu\u00e1ndo algo no te parece bien, y en ocasiones logras comunicarlo. Sin embargo, la inconsistencia es tu mayor desaf\u00edo \u2014 tus respuestas asertivas dependen en gran medida del contexto, la confianza con la persona o tu estado emocional del d\u00eda. Este nivel es, en realidad, uno de los m\u00e1s significativos: ya no eres completamente pasivo/a, pero a\u00fan no has consolidado la asertividad como un h\u00e1bito estable.`,
+    strengths: `Tu mayor fortaleza es la <strong>conciencia de ti mismo/a</strong>: sabes cu\u00e1ndo no est\u00e1s comunicando lo que realmente necesitas, y eso ya es un paso enorme. Tambi\u00e9n muestras <strong>voluntad de crecimiento</strong> \u2014 de lo contrario, no habr\u00edas llegado hasta aqu\u00ed. En contextos donde te sientes seguro/a, puedes ser bastante efectivo/a en tu comunicaci\u00f3n.`,
+    recommendations: `Trabaja en la <strong>coherencia situacional</strong>: el objetivo es que tu nivel de asertividad no flect\u00fae tanto seg\u00fan el contexto. Lleva un \u201cdiario de momentos asertivos\u201d: anota las situaciones donde te expresaste bien y las que evitaste. Identifica patrones. Practica tambi\u00e9n el <strong>desacuerdo constructivo</strong> en situaciones de bajo riesgo para ir construyendo confianza progresivamente.`
+  },
+  {
+    name: "Asertividad Moderada",
+    range: "60\u201374", min: 60, max: 74,
+    tagline: "Comunicas con intenci\u00f3n. El siguiente nivel es hacerlo con plena confianza.",
+    color: "#5A7A5E",
+    reflection: `Has desarrollado una base s\u00f3lida de comunicaci\u00f3n asertiva. <strong>Expresas tus opiniones con regularidad</strong>, manejas muchas situaciones con aplomo y generalmente sabes cu\u00e1ndo y c\u00f3mo poner l\u00edmites. Sin embargo, a\u00fan hay contextos \u2014 especialmente con figuras de autoridad, relaciones \u00edntimas o conversaciones de alta carga emocional \u2014 donde tu asertividad puede tambalear. La diferencia entre este nivel y el siguiente no es de habilidad, sino de <strong>confianza interna sostenida</strong>.`,
+    strengths: `Tienes la capacidad de <strong>mantener relaciones saludables</strong> donde tu voz es escuchada y respetada. Sabes pedir ayuda cuando la necesitas, manejas bien el feedback y rara vez acumulas resentimiento sin expresarlo. Tu comunicaci\u00f3n es percibida por los dem\u00e1s como <strong>equilibrada y madura</strong> en la mayor\u00eda de los contextos.`,
+    recommendations: `El crecimiento para ti est\u00e1 en los <strong>puntos ciegos situacionales</strong>: identifica en qu\u00e9 contextos espec\u00edficos tu asertividad disminuye y trabaja ah\u00ed con intenci\u00f3n. Practica tambi\u00e9n el lenguaje no verbal: la postura, el tono y el contacto visual pueden reforzar enormemente el impacto de tus palabras. Trabaja en la <strong>autocompasi\u00f3n asertiva</strong>: ser asertivo/a no requiere justificaci\u00f3n, solo claridad.`
+  },
+  {
+    name: "Alta Asertividad",
+    range: "75\u201389", min: 75, max: 89,
+    tagline: "Tu comunicaci\u00f3n es un activo. Lo usas con consciencia y habilidad.",
+    color: "#C4522A",
+    reflection: `Tienes una comunicaci\u00f3n asertiva <strong>bien desarrollada y consistente</strong>. Expresas tus necesidades con claridad, defiendes tus l\u00edmites sin agresividad y manejas el conflicto de forma constructiva. Las personas en este nivel son percibidas como <strong>seguras, directas y respetables</strong>. Tu voz tiene peso en los espacios donde participas, y eso no es casualidad \u2014 es el resultado de trabajo interno y autoconocimiento.`,
+    strengths: `Tienes <strong>presencia comunicativa genuina</strong>: las personas conf\u00edan en que lo que dices refleja lo que piensas. Eres capaz de tener conversaciones dif\u00edciles sin que se conviertan en conflictos destructivos. Tambi\u00e9n muestras una buena capacidad de <strong>escucha activa</strong>, lo que hace que tu asertividad no sea percibida como agresividad sino como madurez relacional.`,
+    recommendations: `Tu crecimiento ahora est\u00e1 en la <strong>sofisticaci\u00f3n</strong>: desarrollar mayor flexibilidad estil\u00edstica (adaptar tu comunicaci\u00f3n asertiva al contexto cultural, emocional o relacional sin perder tu autenticidad). Tambi\u00e9n te beneficiar\u00eda explorar c\u00f3mo tu asertividad <strong>inspira a otros</strong>: a este nivel, tienes la capacidad de modelar y ense\u00f1ar comunicaci\u00f3n saludable en tu entorno.`
+  },
+  {
+    name: "Asertividad Excepcional",
+    range: "90\u2013100", min: 90, max: 100,
+    tagline: "Tu comunicaci\u00f3n es un espejo de qui\u00e9n eres \u2014 clara, honesta y poderosa.",
+    color: "#1A1410",
+    reflection: `Tu comunicaci\u00f3n asertiva es <strong>una fortaleza central en tu vida</strong>. Expresas tus necesidades, emociones y l\u00edmites con claridad y confianza en pr\u00e1cticamente cualquier contexto. No necesitas validaci\u00f3n externa para expresarte, ni temes el desacuerdo. Esto habla de un alto nivel de <strong>autoconocimiento, seguridad interna y respeto propio</strong>. En este nivel, la asertividad ya no es una habilidad que practicas \u2014 es simplemente qui\u00e9n eres.`,
+    strengths: `Eres un referente en comunicaci\u00f3n para quienes te rodean, aunque quiz\u00e1s no lo notes. Tu capacidad de <strong>sostener conversaciones dif\u00edciles con calma y claridad</strong> es poco com\u00fan. Tienes tambi\u00e9n una escucha activa genuina \u2014 no escuchas para responder, sino para entender \u2014 lo que hace que tus relaciones sean m\u00e1s profundas y aut\u00e9nticas.`,
+    recommendations: `En este nivel, el crecimiento es m\u00e1s <strong>relacional que individual</strong>: observa c\u00f3mo tu asertividad impacta a otros. A veces, una alta asertividad puede inadvertidamente generar inhibici\u00f3n en personas menos seguras. Trabaja en la <strong>asertividad compasiva</strong>: c\u00f3mo crear espacios donde los dem\u00e1s tambi\u00e9n se sientan seguros de expresarse. Tu pr\u00f3ximo horizonte es el liderazgo comunicacional.`
+  }
+];
+
+// ── ESTADO ────────────────────────────────────────────────────────────────
+let currentQuestion = 0;
+let answers = new Array(20).fill(null);
+let shuffledQuestions = [];
+let shuffledOptions  = [];
+let userName = '';
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startTest() {
+  const nombre   = document.getElementById('input-nombre').value.trim();
+  const apellido = document.getElementById('input-apellido').value.trim();
+  const errorEl  = document.getElementById('name-error');
+
+  if (!nombre || !apellido) {
+    errorEl.classList.add('visible');
+    document.getElementById(nombre ? 'input-apellido' : 'input-nombre').focus();
+    return;
+  }
+  errorEl.classList.remove('visible');
+  userName = `${nombre} ${apellido}`;
+
+  // Mostrar nombre en el header del test
+  document.getElementById('test-user-name').innerHTML =
+    `Evaluando a: <span>${userName}</span>`;
+
+  // Aleatorizar el orden de las 20 preguntas en cada sesión
+  shuffledQuestions = shuffle(questions);
+  // Aleatorizar las opciones de cada pregunta independientemente
+  shuffledOptions = shuffledQuestions.map(q => shuffle(q.options));
+  answers = new Array(20).fill(null);
+  currentQuestion = 0;
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('test-section').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = shuffledQuestions[currentQuestion];
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-number').textContent = `Pregunta ${currentQuestion + 1} de 20`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  shuffledOptions[currentQuestion].forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn fade-in' + (answers[currentQuestion] === opt.value ? ' selected' : '');
+    btn.style.animationDelay = `${i * 0.07}s`;
+    btn.dataset.value = opt.value;
+    btn.innerHTML = `<span class="option-value">${opt.value}</span><span class="option-text">${opt.text}</span>`;
+    btn.onclick = () => selectOption(opt.value);
+    grid.appendChild(btn);
+  });
+
+  const pct = ((currentQuestion + 1) / 20) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = `${currentQuestion + 1} / 20`;
+  document.getElementById('btn-prev').disabled = currentQuestion === 0;
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled = answers[currentQuestion] === null;
+  nextBtn.textContent = currentQuestion === 19 ? 'Ver resultados \u2192' : 'Siguiente \u2192';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectOption(value) {
+  answers[currentQuestion] = value;
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (answers[currentQuestion] === null) return;
+  if (currentQuestion < 19) { currentQuestion++; renderQuestion(); }
+  else showResults();
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) { currentQuestion--; renderQuestion(); }
+}
+
+function showResults() {
+  document.getElementById('test-section').style.display = 'none';
+  document.getElementById('results-section').style.display = 'block';
+
+  const total = answers.reduce((sum, v) => sum + (v || 0), 0);
+  const level = levels.find(l => total >= l.min && total <= l.max) || levels[4];
+
+  // Mostrar nombre en resultados
+  const eyebrow = document.querySelector('.result-eyebrow');
+  if (eyebrow) eyebrow.textContent = `Perfil de ${userName}`;
+
+  document.getElementById('result-title').innerHTML = level.name.replace(/(\w+)$/, '<em>$1</em>');
+  document.getElementById('score-display').textContent = total;
+  document.getElementById('result-tagline').textContent = level.tagline;
+
+  setTimeout(() => {
+    const pct = (total - 20) / 80;
+    const offset = 427 - (427 * pct);
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+    document.getElementById('score-ring').style.stroke = level.color;
+  }, 300);
+
+  // Espectro de niveles
+  const lr = document.getElementById('level-range');
+  lr.innerHTML = levels.map(l => `
+    <div class="level-item ${l.min === level.min ? 'active' : ''}">
+      <div class="level-item-name">${l.name.split(' ').slice(-1)[0]}</div>
+      <div class="level-item-range">${l.range}</div>
+    </div>
+  `).join('');
+
+  // Barras por dimensión
+  const categories = [...new Set(questions.map(q => q.category))];
+  const dimGrid = document.getElementById('dimensions-grid');
+  dimGrid.innerHTML = '';
+
+  categories.forEach(cat => {
+    const qsInCat = shuffledQuestions.filter(q => q.category === cat);
+    const catTotal = qsInCat.reduce((sum, q) => {
+      const idx = shuffledQuestions.indexOf(q);
+      return sum + (answers[idx] || 0);
+    }, 0);
+    const catMax = qsInCat.length * 5;
+    const pct = Math.round((catTotal / catMax) * 100);
+    dimGrid.innerHTML += `
+      <div class="dimension-item">
+        <div class="dimension-top">
+          <span class="dimension-name">${cat}</span>
+          <span class="dimension-pct">${pct}%</span>
+        </div>
+        <div class="dimension-bar"><div class="dimension-bar-fill" data-pct="${pct}"></div></div>
+      </div>`;
+  });
+
+  setTimeout(() => {
+    document.querySelectorAll('.dimension-bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 500);
+
+  document.getElementById('result-reflection').innerHTML = level.reflection;
+  document.getElementById('result-strengths').innerHTML = level.strengths;
+  document.getElementById('result-recommendations').innerHTML = level.recommendations;
+
+  // WhatsApp
+  const dimLines = categories.map(cat => {
+    const qsInCat = shuffledQuestions.filter(q => q.category === cat);
+    const catTotal = qsInCat.reduce((sum, q) => {
+      const idx = shuffledQuestions.indexOf(q);
+      return sum + (answers[idx] || 0);
+    }, 0);
+    const pct = Math.round((catTotal / (qsInCat.length * 5)) * 100);
+    return `  \u2022 ${cat}: ${pct}%`;
+  }).join('%0A');
+
+  const fecha = new Date().toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
+
+  const msg = [
+    `\uD83D\uDCCA *Resultado del Test de Comunicaci\u00f3n Asertiva*`,
+    ``,
+    `\uD83D\uDC64 *Evaluado/a:* ${userName}`,
+    `\uD83C\uDFF7\uFE0F *Nivel:* ${level.name}`,
+    `\uD83C\uDFAF *Puntaje:* ${total} / 100`,
+    `\uD83D\uDCC5 *Fecha:* ${fecha}`,
+    ``,
+    `\uD83D\uDCCC *"${level.tagline}"*`,
+    ``,
+    `\uD83D\uDCC8 *Puntuaci\u00f3n por dimensi\u00f3n:*`,
+    dimLines,
+    ``,
+    `_Test realizado en: test-asertividad.netlify.app_`
+  ].join('%0A');
+
+  document.getElementById('wa-result-btn').href = `https://wa.me/584167036104?text=${msg}`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartTest() {
+  currentQuestion = 0;
+  answers = new Array(20).fill(null);
+  userName = '';
+  document.getElementById('input-nombre').value = '';
+  document.getElementById('input-apellido').value = '';
+  document.getElementById('name-error').classList.remove('visible');
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('hero').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
