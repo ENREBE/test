@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TDAH-20 | Evaluación orientativa para adultos</title>
+<style>
+:root{
+  --bg:#f5f7f9; --card:#ffffff; --text:#17212b; --muted:#64717d;
+  --accent:#c46b4e; --accent2:#9d4f38; --line:#dce2e7;
+  --success:#3d7a5a; --warning:#b47b28; --danger:#a94a45;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+background:linear-gradient(180deg,#eef2f4 0%,var(--bg) 35%);color:var(--text);line-height:1.5}
+.container{width:min(920px,92%);margin:auto}
+header{padding:48px 0 28px;text-align:center}
+.badge{display:inline-block;padding:7px 13px;border-radius:30px;background:#f0ddd6;color:var(--accent2);font-size:.82rem;font-weight:700;letter-spacing:.04em}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;margin:18px 0 10px}
+.subtitle{max-width:720px;margin:auto;color:var(--muted);font-size:1.05rem}
+.notice{margin:25px 0;padding:18px 20px;border-left:4px solid var(--accent);background:#fff8f5;border-radius:10px;color:#4d403b}
+.progress-wrap{position:sticky;top:0;z-index:5;background:rgba(245,247,249,.94);backdrop-filter:blur(10px);padding:12px 0;border-bottom:1px solid var(--line)}
+.progress-top{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted);margin-bottom:7px}
+.progress{height:8px;background:#e2e7eb;border-radius:10px;overflow:hidden}
+.progress-bar{height:100%;width:0;background:var(--accent);transition:.25s}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin:18px 0;box-shadow:0 8px 25px rgba(28,39,49,.045)}
+.section-title{margin:0 0 5px;font-size:1.25rem}
+.section-desc{margin:0 0 20px;color:var(--muted);font-size:.93rem}
+.question{padding:21px 0;border-top:1px solid var(--line)}
+.question:first-of-type{border-top:0}
+.q-number{font-weight:800;color:var(--accent)}
+.q-text{font-size:1rem;font-weight:650;margin:7px 0 15px}
+.options{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.option{position:relative}
+.option input{position:absolute;opacity:0}
+.option label{display:block;text-align:center;border:1px solid var(--line);border-radius:10px;padding:11px 7px;font-size:.82rem;color:#45515c;cursor:pointer;min-height:58px;display:flex;align-items:center;justify-content:center;transition:.18s}
+.option input:checked+label{border-color:var(--accent);background:#f5e5df;color:var(--accent2);font-weight:750;box-shadow:0 0 0 2px #eed1c7}
+.actions{display:flex;justify-content:center;margin:28px 0 50px}
+button{border:0;border-radius:11px;padding:14px 25px;background:var(--accent);color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+button:hover{background:var(--accent2)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.error{display:none;color:var(--danger);background:#fff0ef;padding:13px 16px;border-radius:10px;margin:16px 0}
+#results{display:none;margin:25px 0 70px}
+.result-hero{border-radius:18px;padding:28px;background:#fff;border:1px solid var(--line)}
+.score{font-size:3.4rem;font-weight:900;line-height:1;color:var(--accent2)}
+.level{font-size:1.5rem;font-weight:850;margin:8px 0 12px}
+.result-copy{color:#4e5a64}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:22px}
+.metric{padding:15px;border:1px solid var(--line);border-radius:12px;background:#fafbfc}
+.metric strong{display:block;font-size:1.25rem}
+.metric span{font-size:.78rem;color:var(--muted)}
+.bar{height:7px;background:#e6eaed;border-radius:8px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.reflection{margin-top:18px;padding:20px;background:#f7f2ef;border-radius:13px}
+.reflection h3{margin-top:0}
+.disclaimer{font-size:.86rem;color:var(--muted);padding:18px 0;border-top:1px solid var(--line)}
+.hidden{display:none}
+@media(max-width:700px){
+ .options{grid-template-columns:1fr 1fr}
+ .option:last-child{grid-column:1/-1}
+ .metrics{grid-template-columns:1fr 1fr}
+ header{padding-top:30px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <span class="badge">TDAH-20 · ADULTOS</span>
+  <h1>Cuestionario orientativo de atención y función ejecutiva</h1>
+  <p class="subtitle">20 preguntas para explorar la intensidad de comportamientos relacionados con atención, organización, hiperactividad e impulsividad.</p>
+</header>
+
+<div class="notice">
+<strong>Antes de comenzar:</strong> responde pensando en tu funcionamiento habitual durante los últimos 6 meses.
+</div>
+
+<div class="progress-wrap">
+ <div class="container">
+  <div class="progress-top"><span id="progressText">0 de 20 respondidas</span><span id="progressPct">0%</span></div>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+ </div>
+</div>
+
+<form id="testForm">
+<div class="card">
+<h2 class="section-title">A. Atención y concentración</h2>
+<p class="section-desc">Explora concentración, distractibilidad, memoria cotidiana y evitación de tareas.</p>
+<div id="sectionA"></div>
+</div>
+
+<div class="card">
+<h2 class="section-title">B. Organización y funciones ejecutivas</h2>
+<p class="section-desc">Explora planificación, gestión del tiempo, prioridades y regulación de la atención.</p>
+<div id="sectionB"></div>
+</div>
+
+<div class="card">
+<h2 class="section-title">C. Hiperactividad e inquietud interna</h2>
+<p class="section-desc">Explora inquietud, necesidad de actividad y regulación de la expresión verbal.</p>
+<div id="sectionC"></div>
+</div>
+
+<div class="card">
+<h2 class="section-title">D. Impulsividad y funcionamiento</h2>
+<p class="section-desc">Explora impulsividad y el impacto de las dificultades en la vida cotidiana.</p>
+<div id="sectionD"></div>
+</div>
+
+<div class="error" id="error">Responde las 20 preguntas antes de ver el resultado.</div>
+<div class="actions"><button type="submit">Ver mi resultado</button></div>
+</form>
+
+<section id="results">
+ <div class="result-hero">
+   <div style="color:var(--muted);font-weight:700">Puntuación orientativa</div>
+   <div class="score" id="totalScore">0/80</div>
+   <div class="level" id="levelName"></div>
+   <p class="result-copy" id="resultCopy"></p>
+   <div class="metrics" id="metrics"></div>
+   <div class="reflection">
+     <h3>Reflexión</h3>
+     <p id="reflectionText"></p>
+   </div>
+ </div>
+ <div class="card">
+   <h3>Cómo interpretar este resultado</h3>
+   <p>Una puntuación elevada indica una mayor concentración de señales compatibles con dificultades atencionales o ejecutivas; no confirma por sí sola un diagnóstico de TDAH.</p>
+   <p>Para valorar TDAH en adultos también es importante explorar la historia desde la infancia, la presencia de dificultades en más de un contexto y el grado de interferencia en la vida cotidiana. Otros factores —por ejemplo, sueño, estrés, ansiedad, depresión, medicamentos u otras condiciones— pueden producir síntomas similares.</p>
+   <p><strong>No se utiliza el término “neurotípico” como resultado diagnóstico.</strong> Una puntuación baja solamente indica que este cuestionario no detecta señales elevadas de TDAH.</p>
+ </div>
+ <div class="actions"><button type="button" onclick="window.print()">Imprimir / guardar resultado</button></div>
+ <div class="disclaimer">Instrumento de orientación diseñado a partir de los dominios generales de síntomas de TDAH en adultos descritos en fuentes de divulgación clínica, incluyendo Psychology Today. Los puntos de corte de esta página son una clasificación orientativa creada para este cuestionario y no equivalen a puntos de corte diagnósticos oficiales.</div>
+</section>
+</div>
+
+<script>
+const questions = [
+ ["A",1,"¿Cometes errores por descuido en el trabajo, estudios, trámites o actividades cotidianas, incluso cuando conoces bien la tarea?"],
+ ["A",2,"¿Te resulta difícil mantener la atención durante una conversación, reunión, lectura, película o actividad prolongada?"],
+ ["A",3,"¿Te distraes fácilmente con ruidos, pensamientos, conversaciones, teléfonos, redes sociales u otros estímulos?"],
+ ["A",4,"¿Comienzas una actividad o proyecto con intención de terminarlo, pero terminas abandonándolo o dejándolo inconcluso?"],
+ ["A",5,"¿Te cuesta seguir instrucciones completas, especialmente cuando tienen varios pasos?"],
+ ["A",6,"¿Olvidas citas, compromisos, tareas, fechas importantes o cosas que otras personas te han pedido?"],
+ ["A",7,"¿Pierdes o no encuentras con facilidad objetos que necesitas, como llaves, documentos, teléfono, herramientas o materiales de trabajo?"],
+ ["A",8,"¿Pospones tareas que requieren concentración prolongada, organización o esfuerzo mental, aunque sepas que son importantes?"],
+ ["B",9,"¿Te cuesta organizar tu tiempo y calcular cuánto tardarás realmente en terminar una actividad?"],
+ ["B",10,"¿Sueles comenzar muchas cosas al mismo tiempo y tienes dificultades para establecer prioridades?"],
+ ["B",11,"¿Necesitas presión, urgencia o una fecha límite cercana para conseguir concentrarte plenamente en una tarea?"],
+ ["B",12,"¿Experimentas períodos de concentración extremadamente intensa en aquello que te interesa, hasta el punto de perder la noción del tiempo o descuidar otras obligaciones?"],
+ ["C",13,"¿Te resulta difícil permanecer sentado o quieto durante períodos prolongados, aunque la situación lo requiera?"],
+ ["C",14,"¿Experimentas una sensación interna de inquietud, como si necesitaras estar haciendo algo constantemente?"],
+ ["C",15,"¿Te cuesta relajarte porque tu mente continúa generando pensamientos, ideas, planes o actividades?"],
+ ["C",16,"¿Hablas más de lo que pretendías, cambias rápidamente de tema o sientes dificultad para regular cuánto hablas?"],
+ ["D",17,"¿Interrumpes a otras personas, terminas sus frases o respondes antes de que hayan terminado de hablar?"],
+ ["D",18,"¿Tomas decisiones rápidamente y después piensas que quizás debiste detenerte a considerar las consecuencias?"],
+ ["D",19,"¿Te cuesta esperar tu turno o tolerar situaciones en las que tienes que esperar?"],
+ ["D",20,"¿Tu distracción, impulsividad, desorganización o inquietud ha generado problemas reales en el trabajo, estudios, relaciones, economía, hogar o cumplimiento de responsabilidades?"]
+];
+
+const answers = [
+ ["Nunca / casi nunca",0],
+ ["Algunas veces",1],
+ ["Con frecuencia",2],
+ ["Muy frecuentemente",3],
+ ["Casi siempre",4]
+];
+
+function render(section,id){
+ const target=document.getElementById(id);
+ questions.filter(q=>q[0]===section).forEach(q=>{
+  const div=document.createElement("div"); div.className="question";
+  div.innerHTML=`<div><span class="q-number">${q[1]}.</span> <span class="q-text">${q[2]}</span></div>
+  <div class="options">${answers.map((a,i)=>`
+   <div class="option">
+    <input type="radio" id="q${q[1]}_${i}" name="q${q[1]}" value="${a[1]}">
+    <label for="q${q[1]}_${i}">${a[0]}</label>
+   </div>`).join("")}</div>`;
+  target.appendChild(div);
+ });
+}
+render("A","sectionA"); render("B","sectionB"); render("C","sectionC"); render("D","sectionD");
+
+function updateProgress(){
+ let answered=0;
+ for(let i=1;i<=20;i++) if(document.querySelector(`input[name=q${i}]:checked`)) answered++;
+ let pct=Math.round(answered/20*100);
+ document.getElementById("progressText").textContent=`${answered} de 20 respondidas`;
+ document.getElementById("progressPct").textContent=pct+"%";
+ document.getElementById("progressBar").style.width=pct+"%";
+}
+document.addEventListener("change",updateProgress);
+
+function level(score){
+ if(score<=15) return ["Bajo","Pocas señales compatibles con un patrón significativo de TDAH.","No se observan señales elevadas compatibles con TDAH en este cuestionario. Las dificultades ocasionales de concentración, organización o impulsividad pueden formar parte de la experiencia normal."];
+ if(score<=30) return ["Leve","Algunas características compatibles, generalmente de intensidad baja.","Aparecen algunas dificultades relacionadas con atención, organización o impulsividad, pero su intensidad global es baja. Conviene observar si aumentan bajo estrés, falta de sueño, exceso de responsabilidades o tareas poco estimulantes."];
+ if(score<=45) return ["Moderado","Presencia relevante de características compatibles.","Tu resultado muestra una cantidad relevante de características compatibles con dificultades atencionales, ejecutivas o de impulsividad. No confirma TDAH, pero puede justificar una evaluación más profunda si existe afectación funcional."];
+ if(score<=60) return ["Alto","Concentración elevada de características compatibles.","Tu puntuación indica una concentración elevada de características compatibles con TDAH adulto. Sería razonable considerar una evaluación profesional, especialmente si el patrón es persistente, aparece en varios contextos y se remonta a la infancia."];
+ return ["Muy alto","Intensidad muy elevada de características compatibles.","Tu resultado presenta una intensidad muy elevada de características compatibles con TDAH. No constituye un diagnóstico, pero representa una señal importante para considerar una evaluación profesional especializada."];
+}
+
+function reflection(score){
+ if(score<=15) return "No todo problema de concentración requiere una explicación clínica. Si existe una dificultad concreta, puede ser más útil identificar en qué situaciones aparece y qué factores la modifican que asumir una etiqueta.";
+ if(score<=30) return "La atención no funciona igual en todas las situaciones. Observa qué ocurre con el sueño, el estrés, la motivación, el interés y la estructura de las tareas antes de sacar conclusiones.";
+ if(score<=45) return "El objetivo no es encontrar una etiqueta, sino comprender cómo funciona tu atención, qué situaciones la favorecen o dificultan y qué impacto tiene en tu vida.";
+ if(score<=60) return "Puede existir una diferencia entre saber qué tienes que hacer y conseguir regular atención, motivación, tiempo y conducta para hacerlo. Comprender esa diferencia puede ser más útil que juzgarte por ella.";
+ return "Una puntuación elevada no define quién eres. Describe un patrón de funcionamiento que merece ser comprendido. Antes de concluir que existe TDAH, es necesario investigar cuándo comenzaron estas dificultades, dónde aparecen, cuánto interfieren y qué otros factores podrían explicarlas.";
+}
+
+document.getElementById("testForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ let vals=[],missing=false;
+ for(let i=1;i<=20;i++){
+  const el=document.querySelector(`input[name=q${i}]:checked`);
+  if(!el) missing=true; else vals.push(Number(el.value));
+ }
+ const error=document.getElementById("error");
+ if(missing){error.style.display="block";error.scrollIntoView({behavior:"smooth",block:"center"});return}
+ error.style.display="none";
+ const score=vals.reduce((a,b)=>a+b,0);
+ const l=level(score);
+ document.getElementById("totalScore").textContent=score+"/80";
+ document.getElementById("levelName").textContent="Nivel orientativo: "+l[0];
+ document.getElementById("resultCopy").textContent=l[1];
+ document.getElementById("reflectionText").textContent=reflection(score);
+
+ const dims=[
+  ["Atención",vals.slice(0,8).reduce((a,b)=>a+b,0),32],
+  ["Funciones ejecutivas",vals.slice(8,12).reduce((a,b)=>a+b,0),16],
+  ["Hiperactividad",vals.slice(12,16).reduce((a,b)=>a+b,0),16],
+  ["Impulsividad",vals.slice(16,19).reduce((a,b)=>a+b,0),12],
+  ["Impacto funcional",vals[19],4]
+ ];
+ document.getElementById("metrics").innerHTML=dims.map(d=>`
+  <div class="metric"><strong>${d[1]}/${d[2]}</strong><span>${d[0]}</span>
+  <div class="bar"><i style="width:${d[1]/d[2]*100}%"></i></div></div>`).join("");
+ document.getElementById("results").style.display="block";
+ document.getElementById("results").scrollIntoView({behavior:"smooth"});
+});
+</script>
+</body>
+</html>
