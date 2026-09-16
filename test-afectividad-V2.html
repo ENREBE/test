@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de Seguimiento · Comunicación Afectiva</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:     #F7F3ED;
+    --ink:       #1A1410;
+    --gold:      #C49A30;
+    --gold-dk:   #8B6914;
+    --gold-lt:   rgba(196,154,48,0.06);
+    --sage:      #5A7A5E;
+    --rust:      #C4522A;
+    --mist:      #E8E2D9;
+    --warm-gray: #8C7B6E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(196,154,48,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(90,122,94,0.07) 0%, transparent 60%);
+  }
+
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold-dk);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 72px); line-height: 1.05; font-weight: 700;
+    color: var(--ink); max-width: 700px; margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-dk); }
+
+  .hero-subtitle {
+    font-size: 17px; font-weight: 300; color: var(--warm-gray);
+    max-width: 520px; line-height: 1.7; margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .sesgo-note {
+    background: rgba(196,154,48,0.06);
+    border: 1px solid rgba(196,154,48,0.25);
+    border-left: 3px solid var(--gold);
+    padding: 16px 22px; max-width: 520px; text-align: left;
+    margin-bottom: 40px;
+    opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .sesgo-note p { font-size: 13px; line-height: 1.7; color: var(--warm-gray); }
+  .sesgo-note strong { color: var(--ink); font-weight: 500; }
+
+  /* Nombre */
+  .name-form {
+    display: flex; flex-direction: column; gap: 14px;
+    width: 100%; max-width: 420px; margin-bottom: 36px;
+    opacity: 0; animation: fadeUp 0.8s 0.75s forwards;
+  }
+  .name-row { display: flex; gap: 12px; }
+  .name-field { display: flex; flex-direction: column; flex: 1; gap: 6px; }
+  .name-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--warm-gray); text-align: left; }
+  .name-input {
+    font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--ink);
+    background: white; border: 1.5px solid var(--mist);
+    padding: 14px 18px; outline: none; transition: border-color 0.25s; width: 100%;
+  }
+  .name-input:focus { border-color: var(--gold); }
+  .name-input::placeholder { color: #CFC8BF; }
+  .name-error { font-size: 12px; color: var(--gold-dk); text-align: left; display: none; }
+  .name-error.visible { display: block; }
+
+  .hero-meta {
+    display: flex; gap: 36px; margin-bottom: 48px;
+    opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .meta-item { text-align: center; }
+  .meta-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--ink); display: block; }
+  .meta-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-gray); }
+  .meta-sep { width: 1px; background: var(--mist); align-self: stretch; }
+
+  .start-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--cream); background: var(--ink); border: none;
+    padding: 18px 48px; cursor: pointer;
+    position: relative; overflow: hidden; transition: all 0.3s;
+    opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+  }
+  .start-btn::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gold-dk); transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .start-btn:hover::after { transform: translateX(0); }
+  .start-btn span { position: relative; z-index: 1; }
+
+  .decoration {
+    position: absolute; font-family: 'Playfair Display', serif;
+    font-size: 200px; font-weight: 700;
+    color: rgba(196,154,48,0.04);
+    pointer-events: none; line-height: 1; user-select: none;
+  }
+  .decoration.left { left: -40px; bottom: 40px; }
+  .decoration.right { right: -20px; top: 60px; }
+
+  /* TEST */
+  #test-section { display: none; min-height: 100vh; padding: 60px 24px 80px; }
+  .test-container { max-width: 760px; margin: 0 auto; }
+
+  .test-user-name {
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--warm-gray); text-align: right; margin-bottom: 32px;
+  }
+  .test-user-name span { color: var(--gold-dk); font-weight: 500; }
+
+  .progress-bar-wrap { margin-bottom: 56px; }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  .progress-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--warm-gray); }
+  .progress-count { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--ink); }
+  .progress-track { height: 2px; background: var(--mist); position: relative; }
+  .progress-fill {
+    height: 100%; background: var(--gold);
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1); position: relative;
+  }
+  .progress-fill::after {
+    content: ''; position: absolute; right: -4px; top: -3px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  }
+
+  .category-badge {
+    display: inline-block; font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold-dk);
+    border: 1px solid rgba(196,154,48,0.35); padding: 5px 14px; margin-bottom: 24px;
+  }
+
+  .question-number { font-family: 'Playfair Display', serif; font-size: 13px; color: var(--warm-gray); margin-bottom: 16px; }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 30px); font-weight: 400;
+    line-height: 1.35; color: var(--ink); margin-bottom: 48px; min-height: 80px;
+  }
+
+  .options-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 48px; }
+
+  .option-btn {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px 24px; background: white;
+    border: 1.5px solid var(--mist); cursor: pointer;
+    text-align: left; transition: all 0.25s; position: relative; overflow: hidden;
+  }
+  .option-btn::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 0; background: var(--gold); transition: width 0.3s;
+  }
+  .option-btn:hover { border-color: var(--gold); transform: translateX(4px); }
+  .option-btn:hover::before { width: 3px; }
+  .option-btn.selected { border-color: var(--gold); background: rgba(196,154,48,0.04); }
+  .option-btn.selected::before { width: 3px; }
+  .option-value { display: none; }
+  .option-text { font-size: 15px; font-weight: 400; color: var(--ink); line-height: 1.4; }
+
+  .nav-buttons { display: flex; justify-content: space-between; align-items: center; }
+  .nav-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+    letter-spacing: 2.5px; text-transform: uppercase; padding: 14px 32px;
+    border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+    cursor: pointer; transition: all 0.25s;
+  }
+  .nav-btn:hover:not(:disabled) { background: var(--ink); color: var(--cream); }
+  .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .nav-btn.primary { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .nav-btn.primary:hover { background: var(--gold-dk); border-color: var(--gold-dk); }
+
+  /* RESULTS */
+  #results-section { display: none; min-height: 100vh; }
+
+  .results-hero {
+    padding: 80px 24px 60px; text-align: center;
+    border-bottom: 1px solid var(--mist); position: relative; overflow: hidden;
+  }
+  .results-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(196,154,48,0.06) 0%, transparent 70%);
+  }
+
+  .result-eyebrow {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold-dk); margin-bottom: 24px; position: relative;
+  }
+
+  .result-level-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 68px); font-weight: 700;
+    color: var(--ink); margin-bottom: 8px; position: relative;
+  }
+  .result-level-name em { font-style: italic; color: var(--gold-dk); }
+
+  .avance-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(90,122,94,0.08); border: 1px solid rgba(90,122,94,0.35);
+    padding: 10px 24px; margin: 16px auto 0; position: relative;
+  }
+  .avance-badge .avance-icon { font-size: 18px; }
+  .avance-badge .avance-text { font-size: 13px; font-weight: 500; color: var(--sage); letter-spacing: 1px; }
+
+  .score-ring-container {
+    position: relative; width: 160px; height: 160px; margin: 40px auto 32px;
+  }
+  .score-ring-container svg { transform: rotate(-90deg); }
+  .score-ring-track { fill: none; stroke: var(--mist); stroke-width: 8; }
+  .score-ring-fill {
+    fill: none; stroke: var(--gold); stroke-width: 8; stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .score-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .score-number { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: var(--ink); line-height: 1; }
+  .score-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--warm-gray); margin-top: 4px; }
+
+  .results-content { max-width: 760px; margin: 0 auto; padding: 60px 24px 80px; }
+
+  .result-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 26px); font-style: italic;
+    color: var(--warm-gray); text-align: center; margin-bottom: 60px; line-height: 1.5;
+  }
+
+  .result-block { margin-bottom: 48px; }
+  .result-block-label {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold-dk); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .result-block-label::after { content: ''; flex: 1; height: 1px; background: var(--mist); }
+  .result-block p { font-size: 16px; line-height: 1.8; color: var(--ink); font-weight: 300; }
+  .result-block strong { font-weight: 500; }
+
+  .sesgo-report {
+    background: rgba(212,168,67,0.06); border: 1px solid rgba(212,168,67,0.25);
+    border-left: 3px solid var(--gold); padding: 20px 24px; margin-bottom: 48px;
+  }
+  .sesgo-report-label {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold-dk); font-weight: 600; margin-bottom: 10px;
+  }
+  .sesgo-report p { font-size: 14px; line-height: 1.7; color: var(--warm-gray); }
+  .sesgo-report strong { color: var(--ink); font-weight: 500; }
+
+  .dimensions-grid { display: grid; gap: 20px; margin-bottom: 48px; }
+  .dimension-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .dimension-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .dimension-pct { font-family: 'Playfair Display', serif; font-size: 14px; color: var(--gold-dk); }
+  .dimension-bar { height: 3px; background: var(--mist); }
+  .dimension-bar-fill { height: 100%; background: var(--gold); transition: width 1.2s cubic-bezier(0.4,0,0.2,1); width: 0; }
+
+  .level-range { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 60px; }
+  .level-item { padding: 16px 10px; text-align: center; border: 1px solid var(--mist); position: relative; }
+  .level-item.active { border-color: var(--gold); background: rgba(196,154,48,0.04); }
+  .level-item.active::after {
+    content: '▼'; position: absolute; bottom: -20px; left: 50%;
+    transform: translateX(-50%); color: var(--gold-dk); font-size: 12px;
+  }
+  .level-item-name { font-size: 11px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .level-item-range { font-size: 10px; color: var(--warm-gray); }
+
+  .restart-btn {
+    display: block; margin: 0 auto;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--cream); background: var(--ink); border: none;
+    padding: 18px 48px; cursor: pointer; transition: background 0.3s;
+  }
+  .restart-btn:hover { background: var(--gold-dk); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .wa-btn-wrap { margin: 0 auto 20px; text-align: center; }
+  .wa-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    background: #25D366; color: white; text-decoration: none;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    padding: 18px 40px; position: relative; overflow: hidden;
+    transition: background 0.3s; border: none; cursor: pointer;
+  }
+  .wa-btn::after {
+    content: ''; position: absolute; inset: 0;
+    background: #128C7E; transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .wa-btn:hover::after { transform: translateX(0); }
+  .wa-btn span, .wa-btn svg { position: relative; z-index: 1; }
+  .wa-note { font-size: 12px; color: var(--warm-gray); margin-top: 10px; font-weight: 300; }
+
+  @media (max-width: 480px) {
+    .level-range { grid-template-columns: repeat(3, 1fr); }
+    .hero-meta { gap: 20px; }
+    .meta-num { font-size: 22px; }
+    .name-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="decoration left">♡</div>
+  <div class="decoration right">↑</div>
+
+  <p class="hero-eyebrow">Test de Seguimiento · Post-Intervención</p>
+  <h1 class="hero-title">¿Cuánto ha <em>cambiado</em> tu mundo afectivo?</h1>
+  <p class="hero-subtitle">Un test de seguimiento para evaluar el movimiento real en tu comunicación afectiva después del proceso terapéutico. Las mismas 10 dimensiones, preguntas completamente nuevas y diseño anti-sesgo.</p>
+
+  <div class="sesgo-note">
+    <p><strong>Sobre el diseño de este test:</strong> Las preguntas mezclan situaciones directas e inversas de forma aleatoria. Algunas describen apertura afectiva, otras describen patrones de cierre o protección. El orden de las opciones varía en cada sesión. Responde desde lo que <em>realmente ocurre</em> hoy, no desde lo que el proceso te enseñó que debería ocurrir.</p>
+  </div>
+
+  <div class="name-form">
+    <div class="name-row">
+      <div class="name-field">
+        <label class="name-label" for="input-nombre">Nombre</label>
+        <input class="name-input" id="input-nombre" type="text" placeholder="Tu nombre" autocomplete="given-name" maxlength="40"/>
+      </div>
+      <div class="name-field">
+        <label class="name-label" for="input-apellido">Apellido</label>
+        <input class="name-input" id="input-apellido" type="text" placeholder="Tu apellido" autocomplete="family-name" maxlength="40"/>
+      </div>
+    </div>
+    <p class="name-error" id="name-error">Por favor ingresa tu nombre y apellido para continuar.</p>
+  </div>
+
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-num">20</span>
+      <span class="meta-label">Preguntas</span>
+    </div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">
+      <span class="meta-num">10</span>
+      <span class="meta-label">Dimensiones</span>
+    </div>
+    <div class="meta-sep"></div>
+    <div class="meta-item">
+      <span class="meta-num">~8'</span>
+      <span class="meta-label">Duración</span>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startTest()"><span>Iniciar evaluación →</span></button>
+</section>
+
+<!-- TEST -->
+<section id="test-section">
+  <div class="test-container">
+    <div class="test-user-name" id="test-user-name"></div>
+    <div class="progress-bar-wrap">
+      <div class="progress-top">
+        <span class="progress-label">Progreso</span>
+        <span class="progress-count" id="progress-count">1 / 20</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:5%"></div>
+      </div>
+    </div>
+    <div id="question-card">
+      <div class="category-badge" id="q-category"></div>
+      <p class="question-number" id="q-number"></p>
+      <h2 class="question-text" id="q-text"></h2>
+      <div class="options-grid" id="options-grid"></div>
+      <div class="nav-buttons">
+        <button class="nav-btn" id="btn-prev" onclick="prevQuestion()" disabled>← Anterior</button>
+        <button class="nav-btn primary" id="btn-next" onclick="nextQuestion()" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results-section">
+  <div class="results-hero">
+    <p class="result-eyebrow" id="result-eyebrow">Tu perfil de avance afectivo</p>
+    <h1 class="result-level-name" id="result-title"></h1>
+    <div id="avance-badge-wrap"></div>
+    <div class="score-ring-container">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle class="score-ring-track" cx="80" cy="80" r="68"/>
+        <circle class="score-ring-fill" id="score-ring" cx="80" cy="80" r="68"
+          stroke-dasharray="427" stroke-dashoffset="427"/>
+      </svg>
+      <div class="score-center">
+        <span class="score-number" id="score-display">0</span>
+        <span class="score-label">puntos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-content">
+    <p class="result-tagline" id="result-tagline"></p>
+
+    <div class="result-block-label" style="margin-bottom:24px;">Tu posición en el espectro</div>
+    <div class="level-range" id="level-range"></div>
+    <br><br>
+
+    <div class="sesgo-report">
+      <div class="sesgo-report-label">📊 Análisis de consistencia de respuestas</div>
+      <p id="sesgo-analysis"></p>
+    </div>
+
+    <div class="result-block-label">Dimensiones evaluadas</div>
+    <div class="dimensions-grid" id="dimensions-grid"></div>
+
+    <div class="result-block">
+      <div class="result-block-label">Análisis de avance</div>
+      <p id="result-reflection"></p>
+    </div>
+    <div class="result-block">
+      <div class="result-block-label">Lo que el proceso movió</div>
+      <p id="result-strengths"></p>
+    </div>
+    <div class="result-block">
+      <div class="result-block-label">Próximos pasos</div>
+      <p id="result-growth"></p>
+    </div>
+
+    <div class="wa-btn-wrap">
+      <a id="wa-result-btn" class="wa-btn" href="#" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span>💝 Enviar mi avance por WhatsApp</span>
+      </a>
+      <p class="wa-note">Se abrirá WhatsApp con tu resultado listo para enviar</p>
+    </div>
+    <button class="restart-btn" onclick="restartTest()">Realizar el test de nuevo</button>
+  </div>
+</section>
+
+<script>
+/*
+ * DOBLE SESGO — SISTEMA DE TRES MODALIDADES
+ * ─────────────────────────────────────────────────────────────────────────────
+ * A) DIRECTA (8 preguntas): la situación describe una conducta afectiva
+ *    o su ausencia. Op.1 = cierre / bloqueo. Op.5 = apertura / integración.
+ *    La persona que "sabe la respuesta" puede elegir op.5 sistemáticamente.
+ *    Contrarrestado por: redacción desde motivaciones internas, no conductas,
+ *    y opciones que describen matices intermedios genuinamente atractivos.
+ *
+ * B) INVERTIDA (7 preguntas): la pregunta describe un patrón de PROTECCIÓN
+ *    o CIERRE afectivo. Op.1 = "casi nunca ocurre" (= apertura, valor 5 real)
+ *    Op.5 = "casi siempre ocurre" (= cierre, valor 1 real). El cálculo invierte
+ *    el valor elegido: valor_real = 6 - valor_elegido. Quien elige siempre "más"
+ *    no obtiene más puntos en estas preguntas — sino menos.
+ *
+ * C) MIXTA (5 preguntas): la pregunta explora el origen, la textura o el patrón
+ *    de la experiencia afectiva, sin que ninguna opción sea reconociblemente
+ *    "la buena". Requiere introspección genuina para elegir.
+ *
+ * Aleatorización doble: orden de preguntas + orden de opciones, independientes
+ * entre sí, regenerados en cada sesión.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+const questions = [
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 1 · Expresión de amor y cariño
+  // ══════════════════════════════════════════════
+
+  {
+    id: 1, category: "Expresión de amor y cariño",
+    // TIPO C — La pregunta no pregunta "si lo expresas" sino "qué ocurre cuando no lo haces"
+    // No hay opción reconociblemente correcta
+    text: "Piensa en el afecto que sientes por alguien cercano y que hoy no has expresado. ¿Qué está reteniendo esa expresión?",
+    options: [
+      { value: 1, text: "La certeza de que decirlo haría las cosas incómodas o cambiaría algo que prefiero no tocar." },
+      { value: 2, text: "La expectativa de que el otro lo sepa sin que yo lo diga — ya debería notarlo." },
+      { value: 3, text: "El hábito — no es que lo evite conscientemente, simplemente no suele surgir." },
+      { value: 4, text: "El momento — lo guardo para cuando haya una situación que lo haga natural." },
+      { value: 5, text: "Nada en particular — si hay afecto pendiente de expresar, lo expreso antes de que termine el día." }
+    ]
+  },
+
+  {
+    id: 2, category: "Expresión de amor y cariño",
+    // TIPO B — Invertida: "¿cuánto te cuesta decirlo en voz alta?"
+    text: "¿Con qué frecuencia sientes que el cariño que tienes hacia alguien queda en tu interior sin llegar a salir en palabras o gestos concretos?",
+    options: [
+      { value: 5, text: "Casi nunca — lo que siento encuentra su camino hacia afuera con relativa naturalidad." },
+      { value: 4, text: "Rara vez — solo cuando la situación tiene una carga que me hace más cauteloso/a." },
+      { value: 3, text: "Ocasionalmente — hay emociones que se quedan dentro aunque no lo quiero así." },
+      { value: 2, text: "Con bastante frecuencia — expreso menos de lo que siento en la mayoría de mis relaciones." },
+      { value: 1, text: "Casi siempre — entre lo que siento y lo que muestro hay una distancia importante y constante." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 2 · Recepción de afecto
+  // ══════════════════════════════════════════════
+
+  {
+    id: 3, category: "Recepción de afecto",
+    // TIPO A — Directa con escenario que no suena a "pregunta de terapia"
+    text: "Alguien hace algo pequeño por ti sin que se lo hayas pedido — reserva un turno que sabía que necesitabas, guarda algo que le hizo pensar en ti. ¿Qué pasa en ti cuando lo descubres?",
+    options: [
+      { value: 1, text: "Algo se contrae — el gesto me genera más incomodidad que calidez, aunque no lo muestre." },
+      { value: 2, text: "Lo agradezco, pero de inmediato pienso cómo compensarlo para no quedar en deuda." },
+      { value: 3, text: "Me emociona un momento, luego lo racional izo y vuelvo a terreno neutral." },
+      { value: 4, text: "Lo recibo con calor genuino — ese tipo de gesto me importa y lo dejo importarme." },
+      { value: 5, text: "Me llega profundamente — ser visto/a de esa forma es una de las cosas que más valoro en un vínculo." }
+    ]
+  },
+
+  {
+    id: 4, category: "Recepción de afecto",
+    // TIPO B — Invertida: mide el rechazo al cuidado ajeno
+    text: "¿Con qué frecuencia minimizas o desvías el afecto que alguien te da — un elogio, una muestra de cariño, un gesto de cuidado — antes de que llegue a quedarse del todo?",
+    options: [
+      { value: 5, text: "Casi nunca — puedo recibir afecto sin necesitar neutralizarlo o devolverlo de inmediato." },
+      { value: 4, text: "Rara vez — lo hago en momentos de mucha exposición o con personas en las que aún no confío del todo." },
+      { value: 3, text: "A veces — depende del tipo de afecto y de quién venga." },
+      { value: 2, text: "Con bastante frecuencia — hay algo en mí que desvía el afecto antes de que aterrice." },
+      { value: 1, text: "Casi siempre — recibir afecto sin devolverlo o sin minimizarlo me resulta genuinamente incómodo." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 3 · Gestión de la vulnerabilidad
+  // ══════════════════════════════════════════════
+
+  {
+    id: 5, category: "Gestión de la vulnerabilidad",
+    // TIPO C — La pregunta explora la relación con el propio miedo, no si se muestra o no
+    text: "Cuando sientes miedo dentro de una relación importante — miedo a perderla, a no ser recibido/a, a que algo cambie — ¿qué forma toma ese miedo habitualmente?",
+    options: [
+      { value: 2, text: "Se convierte en distancia — me retiro antes de que ocurra lo que temo." },
+      { value: 5, text: "Puede nombrarse — cuando la relación lo sostiene, puedo decirlo directamente." },
+      { value: 1, text: "Se vuelve invisible — lo entierro tan rápido que casi no llego a saber que estaba." },
+      { value: 3, text: "Se transforma en control — intento manejar la situación para no tener que sentirlo." },
+      { value: 4, text: "Lo reconozco y lo proceso — a veces en soledad, a veces compartido con quien corresponde." }
+    ]
+  },
+
+  {
+    id: 6, category: "Gestión de la vulnerabilidad",
+    // TIPO A — Directa, situación de quiebre contenido
+    text: "Estás cargando algo emocionalmente pesado desde hace días. Una persona cercana lo percibe y te pregunta cómo estás en serio, mirándote directamente. ¿Qué ocurre?",
+    options: [
+      { value: 1, text: "Digo que bien — la pregunta puede ser genuina pero no estoy listo/a para responderla con verdad." },
+      { value: 2, text: "Digo que 'más o menos' — dejo una puerta entreabierta pero no dejo pasar a nadie." },
+      { value: 3, text: "Cuento algo, pero una versión suavizada — lo suficiente para que la pregunta quede respondida." },
+      { value: 4, text: "Les cuento lo que está pasando, aunque mostrar eso me cueste algo." },
+      { value: 5, text: "Digo la verdad — si alguien pregunta de verdad y hay confianza, esa pregunta merece una respuesta real." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 4 · Empatía emocional
+  // ══════════════════════════════════════════════
+
+  {
+    id: 7, category: "Empatía emocional",
+    // TIPO B — Invertida: mide el impulso de resolver en lugar de acompañar
+    text: "Cuando alguien que quieres te describe algo que le duele, ¿con qué frecuencia sientes el impulso de intervenir, explicar o resolver antes de que termine de hablar?",
+    options: [
+      { value: 5, text: "Casi nunca — puedo escuchar el dolor del otro sin necesitar hacer algo con él." },
+      { value: 4, text: "Rara vez — el impulso existe pero lo reconozco y lo dejo pasar." },
+      { value: 3, text: "A veces — depende de cuánto me afecta lo que escucho." },
+      { value: 2, text: "Con bastante frecuencia — la inacción ante el dolor ajeno me genera mucha tensión interna." },
+      { value: 1, text: "Casi siempre — necesito hacer algo con lo que me cuentan, escuchar sin más me resulta muy difícil." }
+    ]
+  },
+
+  {
+    id: 8, category: "Empatía emocional",
+    // TIPO C — La pregunta explora la textura de la resonancia, no si existe
+    text: "Alguien cercano te comparte algo que lo tiene muy emocionado — un logro, una noticia, algo que lo llenó de orgullo. ¿Qué pasa en ti mientras lo escuchas?",
+    options: [
+      { value: 3, text: "Me alegra que esté bien, aunque no siempre logro conectar con la intensidad de su emoción." },
+      { value: 5, text: "Su entusiasmo me mueve — puedo celebrar con la misma energía que si fuera mío." },
+      { value: 1, text: "Escucho y respondo apropiadamente, aunque internamente la distancia emocional está ahí." },
+      { value: 4, text: "Me alegro genuinamente y se lo hago saber de una forma que él/ella puede sentir." },
+      { value: 2, text: "Lo proceso más desde la cabeza que desde el corazón — me cuesta resonar afectivamente." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 5 · Escucha afectiva
+  // ══════════════════════════════════════════════
+
+  {
+    id: 9, category: "Escucha afectiva",
+    // TIPO A — Directa, situación de emoción que no comparte
+    text: "Alguien que quieres expresa una tristeza o un miedo que tú no entiendes del todo — la emoción no te parece proporcional a lo que describe. ¿Qué haces?",
+    options: [
+      { value: 1, text: "Le ofrezco perspectiva — le señalo que quizás está viendo las cosas más grandes de lo que son." },
+      { value: 2, text: "Escucho, pero en algún punto le pregunto si no cree que está exagerando un poco." },
+      { value: 3, text: "No cuestiono lo que siente, pero tampoco lo valido activamente — escucho sin involucrarme demasiado." },
+      { value: 4, text: "Valido lo que siente aunque no lo comparta — su emoción no necesita mi acuerdo para ser real." },
+      { value: 5, text: "Me sintonizo con lo que está viviendo, no con si la causa me parece suficiente — la emoción es siempre suficiente." }
+    ]
+  },
+
+  {
+    id: 10, category: "Escucha afectiva",
+    // TIPO C — Explora qué parte de la mente está activa durante la escucha
+    text: "Durante una conversación emocionalmente significativa con alguien querido, ¿dónde está la mayor parte de tu atención?",
+    options: [
+      { value: 1, text: "En lo que responderé — escucho con un ojo puesto en mi propio turno." },
+      { value: 3, text: "Dividida — a veces completamente presente, otras veces ya procesando lo que diré." },
+      { value: 5, text: "En lo que dice y en lo que no dice — escucho también el espacio entre las palabras." },
+      { value: 2, text: "En el problema — busco entender la situación para poder ayudar." },
+      { value: 4, text: "En la persona — más que en lo que cuenta, en cómo lo está viviendo." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 6 · Afecto físico y proximidad
+  // ══════════════════════════════════════════════
+
+  {
+    id: 11, category: "Afecto físico y proximidad",
+    // TIPO B — Invertida: mide la incomodidad con el contacto afectivo
+    text: "¿Con qué frecuencia el contacto físico espontáneo de alguien cercano — un abrazo, una mano en el hombro, sentarse muy cerca — te genera una tensión que no siempre muestras?",
+    options: [
+      { value: 5, text: "Casi nunca — el contacto afectivo con personas cercanas me resulta natural y cómodo." },
+      { value: 4, text: "Rara vez — solo en situaciones de mucha tensión relacional o con personas nuevas." },
+      { value: 3, text: "A veces — depende del tipo de contacto y de mi estado en ese momento." },
+      { value: 2, text: "Con bastante frecuencia — hay algo que se contrae aunque la persona me importe." },
+      { value: 1, text: "Casi siempre — prefiero mantener distancia física incluso cuando el afecto entre nosotros es real." }
+    ]
+  },
+
+  {
+    id: 12, category: "Afecto físico y proximidad",
+    // TIPO A — Directa, mide la iniciativa de proximidad
+    text: "Estás con alguien que quieres y percibes que un abrazo, un gesto físico o simplemente acercarte podría ser exactamente lo que el momento necesita. ¿Qué pasa?",
+    options: [
+      { value: 1, text: "Espero que la otra persona lo inicie — si lo necesita, lo pedirá o lo hará ella." },
+      { value: 2, text: "Lo considero pero algo me frena — el miedo a que no encaje o a que incomode." },
+      { value: 3, text: "Depende de cuánta confianza haya — con algunas personas sí, con otras me contengo." },
+      { value: 4, text: "Generalmente me acerco — el gesto físico es para mí una forma natural de estar presente." },
+      { value: 5, text: "Lo hago sin pensarlo demasiado — cuando el momento lo pide, el cuerpo responde." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 7 · Apego y disponibilidad emocional
+  // ══════════════════════════════════════════════
+
+  {
+    id: 13, category: "Apego y disponibilidad emocional",
+    // TIPO C — la pregunta describe el movimiento del vínculo, no si es bueno o malo
+    text: "En los vínculos más cercanos de tu vida, ¿cómo describirías la distancia emocional que mantienes a lo largo del tiempo?",
+    options: [
+      { value: 1, text: "Constante — hay una distancia base que mantengo incluso en los mejores momentos." },
+      { value: 3, text: "Oscilatoria — me acerco mucho y luego me retiro, en un ciclo que se repite." },
+      { value: 5, text: "Gestionada — soy capaz de estar cerca sin perder mi centro, y de retirarme sin desaparecer." },
+      { value: 2, text: "Protectora — me acerco hasta cierto punto y luego pongo una barrera casi automática." },
+      { value: 4, text: "Abierta — la cercanía emocional es un terreno en el que me desarrollo, no que me amenaza." }
+    ]
+  },
+
+  {
+    id: 14, category: "Apego y disponibilidad emocional",
+    // TIPO A — Directa, mide la presencia emocional sin agenda
+    text: "Alguien que quieres pasa por un momento difícil y lo único que te pide es que estés — sin resolver, sin hablar necesariamente, solo estar presente. ¿Cómo vives esa situación?",
+    options: [
+      { value: 1, text: "Me resulta difícil — la presencia sin acción me genera ansiedad, como si debiera hacer algo." },
+      { value: 2, text: "Lo intento, pero termino buscando algo concreto que hacer para sentir que sirvo." },
+      { value: 3, text: "Puedo hacerlo en períodos cortos, pero la inacción sostenida me agota." },
+      { value: 4, text: "Puedo estar sin necesitar resolver — entiendo que a veces la presencia es suficiente." },
+      { value: 5, text: "Es una de las formas de estar que más valoro — la presencia sin agenda es, para mí, una forma profunda de amar." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 8 · Comunicación de necesidades afectivas
+  // ══════════════════════════════════════════════
+
+  {
+    id: 15, category: "Comunicación de necesidades afectivas",
+    // TIPO B — Invertida: mide cuánto se espera a que el otro adivine
+    text: "Cuando necesitas apoyo emocional — contención, cercanía, que alguien escuche — ¿con qué frecuencia esperas que la otra persona lo note sola en lugar de pedirlo directamente?",
+    options: [
+      { value: 5, text: "Casi nunca — si necesito apoyo, lo digo con relativa claridad." },
+      { value: 4, text: "Rara vez — prefiero pedirlo, aunque en algunos contextos me cueste más que en otros." },
+      { value: 3, text: "A veces — depende de la relación y de cuánto me expone esa necesidad." },
+      { value: 2, text: "Con bastante frecuencia — espero señales que el otro recoja antes de pedirlo directamente." },
+      { value: 1, text: "Casi siempre — pedir apoyo afectivo de forma directa me expone demasiado." }
+    ]
+  },
+
+  {
+    id: 16, category: "Comunicación de necesidades afectivas",
+    // TIPO A — Directa, mide el reconocimiento verbal explícito
+    text: "Sin que haya una fecha especial, una crisis o una razón obvia, ¿con qué frecuencia les dices a las personas importantes en tu vida lo que significan para ti?",
+    options: [
+      { value: 1, text: "Casi nunca — asumo que mis acciones lo comunican mejor que las palabras." },
+      { value: 2, text: "En momentos de mucha carga emocional, cuando ya no puedo contenerlo más." },
+      { value: 3, text: "En ocasiones especiales — fechas, momentos que lo justifiquen." },
+      { value: 4, text: "Con cierta regularidad — busco momentos sin esperar que algo lo provoque." },
+      { value: 5, text: "Con frecuencia — el reconocimiento verbal explícito es parte de cómo me relaciono, no la excepción." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 9 · Regulación emocional en vínculos
+  // ══════════════════════════════════════════════
+
+  {
+    id: 17, category: "Regulación emocional en vínculos",
+    // TIPO C — No hay opción "correcta" a simple vista; explora el patrón ante emoción intensa
+    text: "Una conversación con alguien que quieres sube de intensidad emocional. Las emociones son reales y hay carga en el ambiente. ¿Qué suele ocurrir en ti?",
+    options: [
+      { value: 2, text: "La emoción me lleva — digo o hago cosas que después necesito reparar." },
+      { value: 4, text: "Siento la intensidad pero puedo elegir cómo moverme dentro de ella." },
+      { value: 1, text: "Me cierro o me voy — la intensidad me resulta abrumadora y necesito salir." },
+      { value: 5, text: "Puedo estar en la emoción intensa y aún así comunicar desde un lugar claro." },
+      { value: 3, text: "Necesito que baje la temperatura antes de poder hablar bien — el tiempo es mi regulador principal." }
+    ]
+  },
+
+  {
+    id: 18, category: "Regulación emocional en vínculos",
+    // TIPO A — Directa, estado posterior a conversación profunda
+    text: "Después de una conversación emocionalmente profunda con alguien importante para ti — no necesariamente un conflicto, sino algo con peso — ¿cómo quedas habitualmente?",
+    options: [
+      { value: 1, text: "Agotado/a — las conversaciones de mucho peso me drenan aunque hayan ido bien." },
+      { value: 2, text: "Con cierta confusión interna — no siempre sé qué siento después de esos intercambios." },
+      { value: 3, text: "Con algo de tensión residual, aunque bien si llegamos a algo concreto." },
+      { value: 4, text: "Más cercano/a — las conversaciones con peso me conectan con la otra persona." },
+      { value: 5, text: "Enriquecido/a — compartir profundidad es de las cosas que más valoro en un vínculo." }
+    ]
+  },
+
+  // ══════════════════════════════════════════════
+  // DIMENSIÓN 10 · Sostén afectivo y presencia
+  // ══════════════════════════════════════════════
+
+  {
+    id: 19, category: "Sostén afectivo y presencia",
+    // TIPO B — Invertida: mide la inhibición del afecto espontáneo
+    text: "¿Con qué frecuencia te contienes de hacer un gesto de afecto espontáneo — un mensaje sin motivo, un abrazo inesperado, un detalle — porque temes que no sea bien recibido?",
+    options: [
+      { value: 5, text: "Casi nunca — cuando siento el impulso de dar afecto, generalmente lo sigo." },
+      { value: 4, text: "Rara vez — solo al inicio de una relación o cuando hay tensión no resuelta." },
+      { value: 3, text: "A veces — depende de la relación y de cómo esté el vínculo en ese momento." },
+      { value: 2, text: "Con bastante frecuencia — el miedo a parecer excesivo/a o a no ser bien recibido/a me frena." },
+      { value: 1, text: "Casi siempre — el afecto espontáneo es territorio de riesgo y generalmente me lo guardo." }
+    ]
+  },
+
+  {
+    id: 20, category: "Sostén afectivo y presencia",
+    // TIPO A — Directa, mide la seguridad afectiva construida
+    text: "Mirando tus relaciones más importantes, ¿hay un espacio donde dar y recibir afecto se siente genuinamente seguro para ambas partes?",
+    options: [
+      { value: 1, text: "No — el afecto en mis relaciones sigue siendo un territorio con mucha incertidumbre." },
+      { value: 2, text: "En algún momento existe, pero es frágil — puede romperse sin razón aparente." },
+      { value: 3, text: "En una o dos relaciones sí, no en todas las que me importan." },
+      { value: 4, text: "En la mayoría de mis vínculos importantes — la confianza afectiva está bastante construida." },
+      { value: 5, text: "Sí — construir y sostener ese espacio es algo que cuido activamente y que hoy es parte de quien soy." }
+    ]
+  }
+
+]; // fin questions
+
+
+// ── NIVELES DE AVANCE (post-intervención afectividad) ───────────────────────
+const levels = [
+  {
+    name: "Punto de Partida",
+    display: "Punto de <em>Partida</em>",
+    range: "20\u201339", min: 20, max: 39,
+    tagline: "El trabajo terapéutico está en su inicio. Cada reconocimiento desde aquí es real.",
+    reflection: `Tu puntaje actual sugiere que <strong>los patrones previos al proceso siguen siendo los predominantes</strong> en tu vida afectiva. Esto no significa que el trabajo terapéutico no haya tenido efecto — con frecuencia, la primera etapa del cambio afectivo ocurre a nivel de conciencia antes de manifestarse en conducta. Es posible que hoy <em>notes</em> más cuándo te cierras, cuándo no recibes, cuándo te proteges — y esa capacidad de observar el propio patrón es, en sí misma, el primer movimiento real.`,
+    strengths: `El solo hecho de <strong>haber transitado un proceso terapéutico</strong> y de estar respondiendo este test habla de una decisión de mirar hacia adentro. Hay una conciencia creciente sobre tu mundo afectivo que este test no captura del todo. Quizás ya identificas momentos de cierre que antes simplemente ocurrían sin que los vieras — esa visibilidad es el primer cambio.`,
+    growth: `Continúa el trabajo con foco en <strong>pequeños gestos concretos</strong>, no en transformaciones grandes. Una sola conversación donde digas algo afectivo que antes guardarías. Un gesto de contacto que inicies. Recibir un cumplido sin desviarlo. El cambio afectivo no ocurre en masa — ocurre en acumulación de momentos pequeños que van creando un nuevo patrón. Sostén el proceso terapéutico con este resultado como punto de referencia.`
+  },
+  {
+    name: "Apertura Inicial",
+    display: "Apertura <em>Inicial</em>",
+    range: "40\u201359", min: 40, max: 59,
+    tagline: "Algo se movió. Lo que viene es darle continuidad.",
+    reflection: `Hay <strong>movimiento real en tu mundo afectivo</strong>. En algunos contextos o dimensiones específicas ya estás respondiendo de forma diferente a antes — quizás expresas más, recibes con más apertura, o toleras la vulnerabilidad con menos defensa. Sin embargo, la inconsistencia sigue siendo notable: el cambio depende del contexto, de la persona, del estado del día. Esto es completamente normal en esta etapa — los nuevos patrones afectivos aún no se han convertido en la respuesta automática.`,
+    strengths: `Tienes <strong>mayor conciencia de tus propios mecanismos de protección</strong> — sabes cuándo te cierras, cuándo evitas, cuándo desvías afecto. Esa visibilidad ya es una fortaleza adquirida. También muestras apertura afectiva genuina en los contextos donde hay suficiente seguridad, lo que demuestra que el cambio es posible para ti.`,
+    growth: `El foco ahora es la <strong>generalización</strong>: llevar lo que ya ocurre en contextos seguros hacia relaciones o situaciones donde todavía hay resistencia. Identifica en qué dos o tres dimensiones está concentrado tu movimiento — y cuáles siguen siendo tus puntos de mayor protección. Trabaja ahí con intención y paciencia.`
+  },
+  {
+    name: "Integración en Proceso",
+    display: "Integración en <em>Proceso</em>",
+    range: "60\u201374", min: 60, max: 74,
+    tagline: "El afecto está encontrando su lugar. Ahora se trata de hacerlo estable.",
+    reflection: `Tu comunicación afectiva ha dado un <strong>cambio cualitativo real</strong>. En la mayoría de tus vínculos cercanos ya hay más apertura, más expresión y más capacidad de recibir que antes del proceso. Hay dimensiones donde el cambio está bien integrado y otras donde el trabajo aún está en curso. La diferencia entre este nivel y el siguiente no es de capacidad sino de <strong>consistencia bajo condiciones de alta carga emocional</strong> — esos momentos donde los patrones viejos aún tienden a reaparecer.`,
+    strengths: `<strong>El cambio ya no es solo intelectual — es vivencial</strong>. Las personas de tu entorno probablemente ya lo perciben, aunque quizás no lo nombren. Tienes más acceso a tu mundo afectivo, más capacidad de expresarlo y más tolerancia a la vulnerabilidad que antes. Eso es el núcleo del trabajo realizado.`,
+    growth: `Trabaja en los <strong>contextos y vínculos donde el patrón antiguo todavía aparece</strong>. Identifica qué situaciones específicas aún activan el cierre o la protección — y esas son las zonas donde queda trabajo por hacer. Reflexiona también sobre cómo comunicas tu propio proceso de cambio a las personas cercanas: a veces los cambios internos necesitan ser reconocidos externamente para consolidarse.`
+  },
+  {
+    name: "Avance Profundo",
+    display: "Avance <em>Profundo</em>",
+    range: "75\u201389", min: 75, max: 89,
+    tagline: "El proceso ha transformado cómo habitas tus relaciones.",
+    reflection: `Tu puntaje refleja un <strong>avance profundo y sostenido en tu comunicación afectiva</strong>. El afecto ha dejado de ser un territorio amenazante para convertirse en un espacio más familiar — donde puedes dar, recibir, mostrar vulnerabilidad y estar presente con más fluidez que antes. Las personas en este nivel llevan el cambio de manera que ya no depende tanto del contexto o del estado emocional — se está convirtiendo en una forma de estar.`,
+    strengths: `Has integrado los cambios <strong>a nivel de identidad relacional</strong>, no solo de comportamiento observable. Tu manera de habitar los vínculos refleja el trabajo realizado. Hay una mayor congruencia entre lo que sientes, lo que expresas y cómo recibes el afecto de otros — y eso se nota en la calidad de tus relaciones.`,
+    growth: `En este nivel el foco se mueve de <em>cambiar</em> a <em>profundizar y sostener</em>. Observa los últimos reductos donde el cierre afectivo aún aparece — generalmente son los vínculos de mayor carga histórica o las situaciones de máxima vulnerabilidad. También considera cómo tu mayor apertura afectiva impacta a quienes te rodean, y qué rol puedes jugar en crear más seguridad afectiva en tus entornos.`
+  },
+  {
+    name: "Transformación Afectiva",
+    display: "Transformación <em>Afectiva</em>",
+    range: "90\u2013100", min: 90, max: 100,
+    tagline: "Has recorrido el camino. El afecto ahora es territorio conocido.",
+    reflection: `Este puntaje representa algo significativo: <strong>la integración del afecto como parte natural de quien eres</strong>. Ya no es un esfuerzo ni un riesgo — es una forma de habitar tus relaciones. Puedes dar y recibir afecto con autenticidad, mostrar vulnerabilidad sin que eso te desestabilice, y crear espacios donde la conexión genuina ocurre con naturalidad. El proceso terapéutico logró exactamente lo que se propuso.`,
+    strengths: `<strong>La transformación es transversal</strong> — no está concentrada en una o dos dimensiones sino distribuida en todo tu perfil afectivo. Tu mayor apertura emocional impacta positivamente la calidad de tus relaciones y la de las personas que te rodean. Tienes acceso a una forma de relacionarte que muchas personas buscan toda su vida.`,
+    growth: `Tu horizonte ahora es la <strong>profundidad y la transmisión</strong>: cómo extender esta calidad de presencia afectiva a relaciones más periféricas, a contextos donde habitualmente no aparece, y cómo puedes ser un espacio seguro para que otros también encuentren acceso a su propio mundo afectivo. El reto más sutil de este nivel es sostenerlo en los momentos de mayor agotamiento o vulnerabilidad propia.`
+  }
+];
+
+// ── DIMENSIONES ──────────────────────────────────────────────────────────────
+const dimensions = [
+  "Expresión de amor y cariño",
+  "Recepción de afecto",
+  "Gestión de la vulnerabilidad",
+  "Empatía emocional",
+  "Escucha afectiva",
+  "Afecto físico y proximidad",
+  "Apego y disponibilidad emocional",
+  "Comunicación de necesidades afectivas",
+  "Regulación emocional en vínculos",
+  "Sostén afectivo y presencia"
+];
+
+// ── ESTADO ───────────────────────────────────────────────────────────────────
+let currentQuestion = 0;
+let answers = new Array(20).fill(null);
+let shuffledQuestions = [];
+let shuffledOptions = [];
+let userName = '';
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startTest() {
+  const nombre   = document.getElementById('input-nombre').value.trim();
+  const apellido = document.getElementById('input-apellido').value.trim();
+  const errorEl  = document.getElementById('name-error');
+
+  if (!nombre || !apellido) {
+    errorEl.classList.add('visible');
+    document.getElementById(nombre ? 'input-apellido' : 'input-nombre').focus();
+    return;
+  }
+  errorEl.classList.remove('visible');
+  userName = `${nombre} ${apellido}`;
+
+  document.getElementById('test-user-name').innerHTML =
+    `Evaluando a: <span>${userName}</span>`;
+
+  shuffledQuestions = shuffle(questions);
+  shuffledOptions   = shuffledQuestions.map(q => shuffle(q.options));
+  answers = new Array(20).fill(null);
+  currentQuestion = 0;
+
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('test-section').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = shuffledQuestions[currentQuestion];
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-number').textContent = `Pregunta ${currentQuestion + 1} de 20`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  shuffledOptions[currentQuestion].forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn' + (answers[currentQuestion] === opt.value ? ' selected' : '');
+    btn.dataset.value = opt.value;
+    btn.innerHTML = `<span class="option-value">${opt.value}</span><span class="option-text">${opt.text}</span>`;
+    btn.addEventListener('click', () => selectOption(opt.value));
+    grid.appendChild(btn);
+  });
+
+  const pct = ((currentQuestion + 1) / 20) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = `${currentQuestion + 1} / 20`;
+  document.getElementById('btn-prev').disabled = currentQuestion === 0;
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled = answers[currentQuestion] === null;
+  nextBtn.textContent = currentQuestion === 19 ? 'Ver mi avance \u2192' : 'Siguiente \u2192';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectOption(value) {
+  answers[currentQuestion] = value;
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (answers[currentQuestion] === null) return;
+  if (currentQuestion < 19) { currentQuestion++; renderQuestion(); }
+  else showResults();
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) { currentQuestion--; renderQuestion(); }
+}
+
+// ── CÁLCULO ──────────────────────────────────────────────────────────────────
+// Las preguntas tipo B tienen sus valores ya asignados correctamente en el array
+// (value:5 = más apertura, value:1 = más cierre), independientemente de si la
+// opción "ocurre mucho" o "ocurre poco" — el valor semántico está en el array,
+// no en el texto de la opción. No se necesita inversión en el cálculo.
+function showResults() {
+  document.getElementById('test-section').style.display = 'none';
+  document.getElementById('results-section').style.display = 'block';
+
+  const total = answers.reduce((sum, v) => sum + (v || 0), 0);
+  const level = levels.find(l => total >= l.min && total <= l.max) || levels[4];
+
+  // Análisis de consistencia (detección de patrón de respuesta)
+  const positionCounts = {};
+  answers.forEach(v => { positionCounts[v] = (positionCounts[v] || 0) + 1; });
+  const maxRepeat = Math.max(...Object.values(positionCounts));
+  const dominantValue = Object.keys(positionCounts).find(k => positionCounts[k] === maxRepeat);
+
+  let sesgoParagraph = '';
+  if (maxRepeat >= 12) {
+    sesgoParagraph = `<strong>Patrón de respuesta detectado:</strong> la opción con valor "${dominantValue}" aparece en ${maxRepeat} de 20 preguntas. Dado que el test combina preguntas directas, invertidas y mixtas, una concentración tan alta puede indicar que se respondió por patrón en lugar de por situación concreta. Se recomienda revisar el resultado con el terapeuta antes de interpretarlo.`;
+  } else if (maxRepeat >= 8) {
+    sesgoParagraph = `Las respuestas muestran <strong>una tendencia moderada</strong> hacia el valor "${dominantValue}" (${maxRepeat} veces). Puede ser reflejo real del perfil, aunque vale revisarlo en el contexto del proceso para verificar que cada respuesta reflejó una situación específica.`;
+  } else {
+    sesgoParagraph = `Las respuestas muestran <strong>una distribución variada</strong> — ningún valor domina de forma que sugiera patrón mecánico. Esto indica que se respondió de manera diferenciada según cada situación, lo que aumenta la fiabilidad del resultado.`;
+  }
+
+  // Badge de avance
+  let avanceBadge = '';
+  if (total >= 60) {
+    avanceBadge = `<div class="avance-badge"><span class="avance-icon">✦</span><span class="avance-text">Avance confirmado</span></div>`;
+  } else if (total >= 40) {
+    avanceBadge = `<div class="avance-badge"><span class="avance-icon">→</span><span class="avance-text">Proceso en movimiento</span></div>`;
+  } else {
+    avanceBadge = `<div class="avance-badge" style="border-color:rgba(196,154,48,0.3);"><span class="avance-icon">◌</span><span class="avance-text" style="color:var(--gold-dk)">Etapa inicial del proceso</span></div>`;
+  }
+
+  document.getElementById('result-eyebrow').textContent = `Avance afectivo de ${userName}`;
+  document.getElementById('result-title').innerHTML = level.display;
+  document.getElementById('avance-badge-wrap').innerHTML = avanceBadge;
+  document.getElementById('score-display').textContent = total;
+  document.getElementById('result-tagline').textContent = level.tagline;
+  document.getElementById('sesgo-analysis').innerHTML = sesgoParagraph;
+  document.getElementById('result-reflection').innerHTML = level.reflection;
+  document.getElementById('result-strengths').innerHTML  = level.strengths;
+  document.getElementById('result-growth').innerHTML     = level.growth;
+
+  // Anillo
+  setTimeout(() => {
+    const offset = 427 - 427 * ((total - 20) / 80);
+    document.getElementById('score-ring').style.strokeDashoffset = offset;
+  }, 300);
+
+  // Espectro de niveles
+  const lr = document.getElementById('level-range');
+  lr.innerHTML = levels.map(l => `
+    <div class="level-item ${l.min === level.min ? 'active' : ''}">
+      <div class="level-item-name">${l.name.split(' ').slice(-1)[0]}</div>
+      <div class="level-item-range">${l.range}</div>
+    </div>`).join('');
+
+  // Barras de dimensiones
+  const dimGrid = document.getElementById('dimensions-grid');
+  dimGrid.innerHTML = '';
+  dimensions.forEach(dim => {
+    const qsInDim = shuffledQuestions.filter(q => q.category === dim);
+    const dimTotal = qsInDim.reduce((sum, q) => {
+      const idx = shuffledQuestions.indexOf(q);
+      return sum + (answers[idx] || 0);
+    }, 0);
+    const pct = Math.round((dimTotal / (qsInDim.length * 5)) * 100);
+    dimGrid.innerHTML += `
+      <div>
+        <div class="dimension-top">
+          <span class="dimension-name">${dim}</span>
+          <span class="dimension-pct">${pct}%</span>
+        </div>
+        <div class="dimension-bar">
+          <div class="dimension-bar-fill" data-pct="${pct}"></div>
+        </div>
+      </div>`;
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.dimension-bar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }, 500);
+
+  // WhatsApp
+  const dimLines = dimensions.map(dim => {
+    const qsInDim = shuffledQuestions.filter(q => q.category === dim);
+    const dimTotal = qsInDim.reduce((sum, q) => {
+      const idx = shuffledQuestions.indexOf(q);
+      return sum + (answers[idx] || 0);
+    }, 0);
+    const pct = Math.round((dimTotal / (qsInDim.length * 5)) * 100);
+    return `  \u2022 ${dim}: ${pct}%`;
+  }).join('%0A');
+
+  const sesgoResumen = maxRepeat >= 12
+    ? '\u26a0\ufe0f Patr\u00f3n de respuesta detectado \u2014 revisar con terapeuta'
+    : maxRepeat >= 8
+    ? '\u2139\ufe0f Tendencia moderada detectada \u2014 considerar revisi\u00f3n'
+    : '\u2705 Distribuci\u00f3n variada \u2014 resultado fiable';
+
+  const fecha = new Date().toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
+
+  const msg = [
+    `\uD83D\uDC9D *Test de Seguimiento \u00b7 Comunicaci\u00f3n Afectiva*`,
+    ``,
+    `\uD83D\uDC64 *Evaluado/a:* ${userName}`,
+    `\uD83C\uDFF7\uFE0F *Nivel de avance:* ${level.name}`,
+    `\uD83C\uDFAF *Puntaje:* ${total} / 100`,
+    `\uD83D\uDCC5 *Fecha:* ${fecha}`,
+    ``,
+    `\uD83D\uDCCC *"${level.tagline}"*`,
+    ``,
+    `\uD83D\uDCCA *Consistencia:* ${sesgoResumen}`,
+    ``,
+    `\uD83D\uDCC8 *Puntuaci\u00f3n por dimensi\u00f3n:*`,
+    dimLines,
+    ``,
+    `_Test de seguimiento post-intervenci\u00f3n terap\u00e9utica_`
+  ].join('%0A');
+
+  document.getElementById('wa-result-btn').href = `https://wa.me/584167036104?text=${msg}`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartTest() {
+  currentQuestion = 0;
+  answers = new Array(20).fill(null);
+  userName = '';
+  document.getElementById('input-nombre').value = '';
+  document.getElementById('input-apellido').value = '';
+  document.getElementById('name-error').classList.remove('visible');
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('hero').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
